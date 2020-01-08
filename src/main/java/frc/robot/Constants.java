@@ -16,4 +16,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final double[] rgbFrcBlue = {0.143, 0.427, 0.429};
+    public static final double[] rgbFrcGreen = {0.197, 0.561, 0.240};
+    public static final double[] rgbFrcRed = {0.460, 0.378, 0.161};
+    public static final double[] rgbFrcYellow = {0.361, 0.524, 0.113}; 
 }
