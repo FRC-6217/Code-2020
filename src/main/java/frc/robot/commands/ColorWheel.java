@@ -17,7 +17,6 @@ public class ColorWheel extends CommandBase {
    * Creates a new ColorWheel.
    */
   private Color colorMatch;
-  private int proxmity;
   private ColorSensor m_colorSensor;
 
   public ColorWheel(ColorSensor m_colorSensor) {
@@ -30,7 +29,6 @@ public class ColorWheel extends CommandBase {
   @Override
   public void initialize() {
     colorMatch = m_colorSensor.getClosestColor();
-    proxmity = m_colorSensor.getProximity();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,7 +60,6 @@ public class ColorWheel extends CommandBase {
     SmartDashboard.putNumber("Blue", m_colorSensor.getColor().blue);
   
     colorMatch = m_colorSensor.getClosestColor();
-    proxmity = m_colorSensor.getProximity();
   }
 
   // Called once the command ends or is interrupted.
