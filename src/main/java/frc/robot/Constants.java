@@ -16,4 +16,21 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    //Ball Angler constants
+    public static final int BA_LEFT_MOTOR = 1;
+    public static final int BA_RIGHT_MOTOR = 1;
+    public static final double BA_SPEED = .5;
+
+    //Ball chucker constants
+    public static final int BC_TOP_MOTOR = 1;
+    public static final int BC_BOTTEM_MOTOR = 1;
+    public static final double SPEED = 0.8;
+
+
+    //Declaration of Button Mapping ports
+    public static final int XBOX_PORT = 1;
+    public static final int BALL_CHUCKER_BUTTON_FORWARD = 1; //(a) button for now
+    public static final int BALL_CHUCKER_BUTTON_BACKWARD = 2; //(b) button for now
+    public static final int BALL_ANGLER_BUTTON_UP = 3; //(x) button for now
+    public static final int BALL_ANGLER_BUTTON_DOWN = 4; //(y) button for now
 }

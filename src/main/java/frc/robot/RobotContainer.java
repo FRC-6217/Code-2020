@@ -8,10 +8,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.BallAnglerController;
+import frc.robot.commands.BallChuckerController;
+import frc.robot.subsystems.BallAngler;
+import frc.robot.subsystems.BallChucker;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -20,10 +25,22 @@ import edu.wpi.first.wpilibj2.command.Command;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //Joysticks
+  private static final Joystick m_xbox = new Joystick(Constants.XBOX_PORT);
+  
+  //Buttons (lots and lots of buttons)
+  private static final JoystickButton m_BallChuckerForwButton = new JoystickButton(m_xbox, Constants.BALL_CHUCKER_BUTTON_FORWARD);
+  private static final JoystickButton m_BallChuckerBackButton = new JoystickButton(m_xbox, Constants.BALL_CHUCKER_BUTTON_BACKWARD);
+  private static final JoystickButton m_BallAnglerUpButton = new JoystickButton(m_xbox, Constants.BALL_ANGLER_BUTTON_UP);
+  private static final JoystickButton m_BallAnglerDownButton = new JoystickButton(m_xbox, Constants.BALL_ANGLER_BUTTON_DOWN);
+  
+  //subsystems
+  private static final BallChucker m_BallChucker = new BallChucker();
+  private static final BallAngler m_BallAngler = new BallAngler();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  //commands
+  private static final BallChuckerController m_BallChuckerController = new BallChuckerController(m_BallChucker, m_BallChuckerForwButton, m_BallChuckerBackButton);
+  private static final BallAnglerController m_BallAnglerController = new BallAnglerController(m_BallAngler, m_BallAnglerUpButton, m_BallAnglerDownButton);
 
 
 
@@ -33,6 +50,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    CommandScheduler.getInstance().setDefaultCommand(m_BallChucker, m_BallChuckerController);
+    CommandScheduler.getInstance().setDefaultCommand(m_BallAngler, m_BallAnglerController);
   }
 
   /**
@@ -52,6 +72,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
