@@ -24,7 +24,7 @@ public final class Constants {
     //Ball chucker constants
     public static final int BC_TOP_MOTOR = 1;
     public static final int BC_BOTTEM_MOTOR = 1;
-    public static final double SPEED = 0.8;
+    public static final double BC_SPEED = 0.8;
 
 
     //Declaration of Button Mapping ports

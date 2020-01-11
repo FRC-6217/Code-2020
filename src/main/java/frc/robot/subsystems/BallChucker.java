@@ -24,13 +24,13 @@ public class BallChucker extends SubsystemBase {
 
 
   public void runFow(){
-    topMotor.set(ControlMode.PercentOutput, Constants.SPEED);
-    botMotor.set(ControlMode.PercentOutput, -Constants.SPEED);
+    topMotor.set(ControlMode.PercentOutput, Constants.BC_SPEED);
+    botMotor.set(ControlMode.PercentOutput, -Constants.BC_SPEED);
   }
 
   public void runBac(){
-    topMotor.set(ControlMode.PercentOutput, -Constants.SPEED);
-    botMotor.set(ControlMode.PercentOutput, Constants.SPEED);
+    topMotor.set(ControlMode.PercentOutput, -Constants.BC_SPEED);
+    botMotor.set(ControlMode.PercentOutput, Constants.BC_SPEED);
   }
 
   public void stop(){
