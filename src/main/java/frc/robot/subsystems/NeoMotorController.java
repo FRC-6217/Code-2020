@@ -30,14 +30,22 @@ public class NeoMotorController extends SubsystemBase {
     m_PIDContoller = m_motor.getPIDController();
 
     this.PID = PID;
+    updatePID();
+
+    m_encoder = m_motor.getEncoder();
+  }
+  //Percent
+  public void setSpeed(double speed){
+    m_motor.set(speed);
+  }
+  
+  public void updatePID(){
     m_PIDContoller.setP(this.PID.kP);
     m_PIDContoller.setI(this.PID.kI);
     m_PIDContoller.setD(this.PID.kD);
     m_PIDContoller.setIZone(this.PID.kIz);
     m_PIDContoller.setFF(this.PID.kFF);
     m_PIDContoller.setOutputRange(PIDMinOutput, PIDMaxOutput);
-
-    m_encoder = m_motor.getEncoder();
   }
 
   public double getPIDMinOutput() {
