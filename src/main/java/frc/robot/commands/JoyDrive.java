@@ -29,13 +29,13 @@ public class JoyDrive extends CommandBase {
   /**
    * Creates a new JoyDrive.
    */
-  public JoyDrive(driveTrain subsystem) {
+  public JoyDrive(driveTrain subsystem, Joystick joy) {
     m_driveTrain = subsystem;
 
     addRequirements(subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
 
-    joy = new Joystick(0);
+    this.joy = joy;
   }
 
   // Called when the command is initially scheduled.
