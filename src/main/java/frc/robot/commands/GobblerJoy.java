@@ -7,52 +7,43 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ballShooter;
+import frc.robot.subsystems.driveTrain;
+import frc.robot.subsystems.gobbler;
 
-public class joyShooter extends CommandBase {
-  private final ballShooter m_ballShooter;
-  private final Joystick joy;
-  private final Joystick xbox;
+public class GobblerJoy extends CommandBase {
+
+  private final gobbler m_gobbler;
+
+  private Joystick joy;
   /**
-   * Creates a new joyShooter.
+   * Creates a new GobblerJoy.
    */
-  public joyShooter(ballShooter subsystem, Joystick joy, Joystick xbox) {
-    m_ballShooter = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
-    
-    this.xbox = xbox;
+  public GobblerJoy(gobbler subsystem, Joystick xbox) {
+    m_gobbler = subsystem;
 
-    this.joy =joy;
+    addRequirements(subsystem);
+
+    this.joy = xbox;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-   // m_ballShooter.resetFactory();
-    m_ballShooter.setPid1();
-    m_ballShooter.setPid2();
-
-    SmartDashboard.putNumber("Velocity Setpoint 1", 0);
-    SmartDashboard.putNumber("Velocity Setpoint 2", 0);
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(xbox.getRawButton(2)) {
-      m_ballShooter.feed(-1);
+    if(joy.getRawButton(1)){\
+      m_gobbler.gobble(-.75);
     }
     else{
-      m_ballShooter.feed(0);
+      m_gobbler.gobble(0);
     }
-
-    m_ballShooter.shoot1(SmartDashboard.getNumber("Velocity Setpoint 1", 0));
-    m_ballShooter.shoot2(SmartDashboard.getNumber("Velocity Setpoint 2", 0));
   }
 
   // Called once the command ends or is interrupted.

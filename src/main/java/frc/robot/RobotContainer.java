@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.GobblerJoy;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.joyShooter;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ballShooter;
 import frc.robot.subsystems.driveTrain;
+import frc.robot.subsystems.gobbler;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -30,11 +32,14 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final driveTrain m_driveTrain = new driveTrain();
   private final ballShooter m_ballShooter = new ballShooter();
+  private final gobbler m_gobbler = new gobbler();
   private final Joystick joystick = new Joystick(0);
+  private final Joystick xbox = new Joystick(1);
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain, joystick);
-  private final joyShooter m_joyShooter = new joyShooter(m_ballShooter, joystick);
+  private final joyShooter m_joyShooter = new joyShooter(m_ballShooter, joystick, xbox);
+  private final GobblerJoy m_gobblerJoy = new GobblerJoy(m_gobbler, xbox);
 
 
 
@@ -45,6 +50,7 @@ public class RobotContainer {
     // Configure the button bindings
     CommandScheduler.getInstance().setDefaultCommand(m_driveTrain, m_joyDrive);
     CommandScheduler.getInstance().setDefaultCommand(m_ballShooter, m_joyShooter);
+    CommandScheduler.getInstance().setDefaultCommand(m_gobbler, m_gobblerJoy);
     configureButtonBindings();
   }
 
