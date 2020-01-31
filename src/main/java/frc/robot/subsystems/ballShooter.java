@@ -68,10 +68,10 @@ public class ballShooter extends SubsystemBase {
 
     encoder1.setVelocityConversionFactor(1);
 
-    kP1 = 0.0008;
-    kI1 = 0;
-    kD1 = 0; 
-    kIz1 = 10; 
+    kP1 = 0.00018;
+    kI1 = 0.15;
+    kD1 = 0.0375; 
+    kIz1 = 10;
     kFF1 = 0.00018; 
     kMaxOutput1 = 1; 
     kMinOutput1 = -1;
@@ -97,11 +97,11 @@ public class ballShooter extends SubsystemBase {
 
     encoder2 = shooter2.getEncoder();
 
-    kP2 = 0.1; 
-    kI2 = 0.0001;
-    kD2 = 0; 
-    kIz2 = 0;
-    kFF2 = 0.1; 
+    kP2 = 0.00003; 
+    kI2 = 0.225;
+    kD2 = 0.05625; 
+    kIz2 = 10;
+    kFF2 = 0.00018; 
     kMaxOutput2 = 1; 
     kMinOutput2 = -1;
 
@@ -142,8 +142,8 @@ public class ballShooter extends SubsystemBase {
       kMinOutput1 = min; kMaxOutput1 = max; 
     }
     // SmartDashboard.getNumber("P Gain 1", 0);
-    shooter1.set(velocity);
-    //pid1.setReference(velocity, ControlType.kVelocity);
+    //shooter1.set(velocity);
+    pid1.setReference(velocity, ControlType.kVelocity);
     SmartDashboard.putNumber("Velocity 1", velocity);
     SmartDashboard.putNumber("ProcessVariable 1", encoder1.getVelocity());
     SmartDashboard.putNumber("Current 1", shooter1.getOutputCurrent());
@@ -170,8 +170,8 @@ public class ballShooter extends SubsystemBase {
       pid2.setOutputRange(min, max); 
       kMinOutput2 = min; kMaxOutput2 = max; 
     }
-    shooter2.set(velocity);
-    //pid2.setReference(velocity, ControlType.kVelocity);
+    //shooter2.set(velocity);
+    pid2.setReference(velocity, ControlType.kVelocity);
     SmartDashboard.putNumber("Velocity 2", velocity);
     SmartDashboard.putNumber("ProcessVariable 2", encoder2.getVelocity());
   }

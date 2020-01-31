@@ -39,7 +39,7 @@ public class GobblerJoy extends CommandBase {
   @Override
   public void execute() {
     if(joy.getRawButton(1)){
-      m_gobbler.gobble(-.75);
+      m_gobbler.gobble(-1);
     }
     else{
       m_gobbler.gobble(0);
