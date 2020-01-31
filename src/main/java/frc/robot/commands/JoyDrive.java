@@ -67,8 +67,8 @@ public class JoyDrive extends CommandBase {
     y = (Math.abs(y) > .2 ? y : 0.0);
     z = (Math.abs(z) > .2 ? z : 0.0);
 
-    x1 = m_driveTrain.TransformX(x, y, isReversed);
-    y1 = m_driveTrain.TransformY(x, y, isReversed);
+    // x1 = m_driveTrain.TransformX(x, y, isReversed);
+    // y1 = m_driveTrain.TransformY(x, y, isReversed);
 
     m_driveTrain.Drive (x1, -y1, z, Math.abs(governer-1));
     gyroButtonForward = false;
