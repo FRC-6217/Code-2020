@@ -68,9 +68,9 @@ public class ballShooter extends SubsystemBase {
 
     encoder1.setVelocityConversionFactor(1);
 
-    kP1 = 0.00018;
-    kI1 = 0.15;
-    kD1 = 0.0375; 
+    kP1 = 0.00001;
+    kI1 = 0;
+    kD1 = 0; 
     kIz1 = 10;
     kFF1 = 0.00018; 
     kMaxOutput1 = 1; 
@@ -97,9 +97,9 @@ public class ballShooter extends SubsystemBase {
 
     encoder2 = shooter2.getEncoder();
 
-    kP2 = 0.00003; 
-    kI2 = 0.225;
-    kD2 = 0.05625; 
+    kP2 = 0.00001; 
+    kI2 = 0;
+    kD2 = 0; 
     kIz2 = 10;
     kFF2 = 0.00018; 
     kMaxOutput2 = 1; 
