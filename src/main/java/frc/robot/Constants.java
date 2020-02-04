@@ -16,4 +16,10 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static class BallShooterConstants {
+        public static final int BOTTOM_CAN_ID = 26;
+        public static final int TOP_CAN_ID = 25;
+        public static final int INTAKE_CAN_ID = 53; 
+         
+    }
 }

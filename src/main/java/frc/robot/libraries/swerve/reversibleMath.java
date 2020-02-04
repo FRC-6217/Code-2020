@@ -4,7 +4,7 @@ public class reversibleMath {
     
     //Encoder Conversion Values
     private final double voltageOffset = 0.015;
-    private final double voltageMultiplier = (90000/1243);
+    private final double voltageMultiplier = (36000/3385);
 
     //Variables to store rotational distances
     private double f1;

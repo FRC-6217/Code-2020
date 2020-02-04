@@ -2,6 +2,7 @@ package frc.robot.libraries.swerve;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANAnalog;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -15,7 +16,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 public class wheelDrive {
     //Encoder, motor, and current channel port for wheel module
     private AnalogInput speedEnc;
-    private AnalogInput angleEnc;
+    private CANAnalog angleEnc;
 
     //PID objects for angle and speed PID loops
     private PIDController speedPID;
@@ -29,12 +30,11 @@ public class wheelDrive {
 
     //Max voltage of angle encoder
     private final double MIN_VOLTS = 0.015;
-	private final double MAX_VOLTS = 4.987;
+	private final double MAX_VOLTS = 3.285;
 	
 	public wheelDrive(int speedMotor, int angleMotor, int angleEncoder) {
         //Pass in Encoder ports to objects
         //this.speedEnc = new AnalogInput(speedEncoder);
-        this.angleEnc = new AnalogInput(angleEncoder);
 
         //Reversible Math Object\
         revMath = new reversibleMath();
@@ -49,10 +49,11 @@ public class wheelDrive {
         //Motors
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
         this.angleMotor = new VictorSPX(angleMotor);
+        this.angleEnc = this.speedMotor.getAnalog(CANAnalog.AnalogMode.kAbsolute);
 	}
 
 	public void drive(double speed, double angle) {
-        SmartDashboard.putNumber("enc", angleEnc.getVoltage());
+        SmartDashboard.putNumber("enc " + this.angleMotor.getDeviceID(), angleEnc.getVoltage());
         //Use reverible math class to find shortest rotational distance
         revMath.calculate(angle, angleEnc.getVoltage());
         
