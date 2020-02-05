@@ -3,8 +3,8 @@ package frc.robot.libraries.swerve;
 public class reversibleMath {
     
     //Encoder Conversion Values
-    private final double voltageOffset = 0.015;
-    private final double voltageMultiplier = (36000/3385);
+    private final double voltageMultiplier = 111.304;
+    private final double voltageOffset = 1.73913;
 
     //Variables to store rotational distances
     private double f1;
@@ -29,12 +29,12 @@ public class reversibleMath {
     //Input 0.015v to 4.987v for angle Current
     public void calculate(double angleRequest, double angleCurrent) {
         // //Convert Requested angle encoder from -1 - 1 to 0deg - 360deg
-        // angleRequest *= 180;
-        // angleRequest += 180;
+        angleRequest *= 180;
+        angleRequest += 180;
         
-        //Convert Current angle encoder from 0.015v - 4.987v to 0deg - 360deg
-        angleCurrent -= voltageOffset;
+        //Convert Current angle encoder from 0.015625v - 3.25v to 0deg - 360deg
         angleCurrent *= voltageMultiplier;
+        angleCurrent -= voltageOffset;
 
         //Find distance between current and requested angle
         //f1 = clock wise

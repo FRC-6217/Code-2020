@@ -29,8 +29,8 @@ public class wheelDrive {
     private reversibleMath revMath;
 
     //Max voltage of angle encoder
-    private final double MIN_VOLTS = 0.015;
-	private final double MAX_VOLTS = 3.285;
+    private final double MIN_VOLTS = 0.015625;
+	private final double MAX_VOLTS = 3.2500;
 	
 	public wheelDrive(int speedMotor, int angleMotor, int angleEncoder) {
         //Pass in Encoder ports to objects
@@ -67,8 +67,8 @@ public class wheelDrive {
 
         //Convert angle from -1 - 1 to MINVOLTS to MAXVOLTS
         double angleSetpoint = angle;  // Optimization offset can be calculated	here.
-        angleSetpoint *= 0.0138111;
-        angleSetpoint += 0.015;
+        angleSetpoint *= 0.008984375;
+        angleSetpoint += 0.015625;
         
         // if (angleSetpoint < MIN_VOLTS) {
 		// 	angleSetpoint += MAX_VOLTS;

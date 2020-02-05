@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.ExampleCommand;
@@ -35,9 +36,10 @@ public class RobotContainer {
   private final driveTrain m_driveTrain = new driveTrain();
   private final ballShooter m_BallShooter = new ballShooter();
   private final IntakeSystem m_IntakeSystem = new IntakeSystem();
+  private final Joystick joy = new Joystick(0);
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-  private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain);
+  private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain, joy);
   private final XboxController m_XboxController = new XboxController(1);
   private final ShooterCommand m_ShooterCommandTurnOff = new ShooterCommand(m_BallShooter, control.DISABLE);
   private final ShooterCommand m_ShooterCommandTurnOn = new ShooterCommand(m_BallShooter, control.ENABLE);

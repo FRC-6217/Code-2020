@@ -29,13 +29,13 @@ public class JoyDrive extends CommandBase {
   /**
    * Creates a new JoyDrive.
    */
-  public JoyDrive(driveTrain subsystem) {
+  public JoyDrive(driveTrain subsystem, Joystick joy) {
     m_driveTrain = subsystem;
 
     addRequirements(subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
 
-    joy = new Joystick(0);
+    this.joy = joy;
   }
 
   // Called when the command is initially scheduled.
@@ -63,14 +63,14 @@ public class JoyDrive extends CommandBase {
         isReversed = true;
     }
     
-    x = (Math.abs(x) > .2 ? x : 0.0);
-    y = (Math.abs(y) > .2 ? y : 0.0);
-    z = (Math.abs(z) > .2 ? z : 0.0);
+    x = (Math.abs(x) > .3 ? x : 0.0);
+    y = (Math.abs(y) > .3 ? y : 0.0);
+    z = (Math.abs(z) > .3 ? z : 0.0);
 
     x1 = m_driveTrain.TransformX(x, y, isReversed);
     y1 = m_driveTrain.TransformY(x, y, isReversed);
 
-    m_driveTrain.Drive (x1, -y1, z, Math.abs(governer-1));
+    m_driveTrain.Drive (-y, x, -z, Math.abs(governer-1));
     gyroButtonForward = false;
     gyroButtonBackward = false;
   }
