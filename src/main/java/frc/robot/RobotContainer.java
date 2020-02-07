@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.AlignZ;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.RealShootCommand;
@@ -40,6 +41,7 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain, joy);
+  private final AlignZ m_AlignZ = new AlignZ(m_driveTrain, joy);
   private final XboxController m_XboxController = new XboxController(1);
   private final ShooterCommand m_ShooterCommandTurnOff = new ShooterCommand(m_BallShooter, control.DISABLE);
   private final ShooterCommand m_ShooterCommandTurnOn = new ShooterCommand(m_BallShooter, control.ENABLE);
@@ -62,9 +64,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_XboxController, Button.kY.value).whenPressed(m_ShooterCommandTurnOff);
-    new JoystickButton(m_XboxController, Button.kX.value).whenPressed(m_ShooterCommandTurnOn);
-    new JoystickButton(m_XboxController, Button.kA.value).whileHeld(m_RealShooter);
+    // new JoystickButton(m_XboxController, Button.kY.value).whenPressed(m_ShooterCommandTurnOff);
+    // new JoystickButton(m_XboxController, Button.kX.value).whenPressed(m_ShooterCommandTurnOn);
+    // new JoystickButton(m_XboxController, Button.kA.value).whileHeld(m_RealShooter);
+    new JoystickButton(joy, 1).whileHeld(m_AlignZ);
   }
 
 

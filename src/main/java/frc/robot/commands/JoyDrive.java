@@ -41,6 +41,8 @@ public class JoyDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_driveTrain.Drive(0, 0, 0, 0);
+
     m_driveTrain.ResetGyro();
   }
 
@@ -78,6 +80,7 @@ public class JoyDrive extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_driveTrain.Drive(0, 0, 0, 0);
   }
 
   // Returns true when the command should end.

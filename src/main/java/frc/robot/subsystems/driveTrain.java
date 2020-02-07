@@ -7,10 +7,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.libraries.swerve.swerveDrive;
 import frc.robot.libraries.swerve.wheelDrive;
 
@@ -26,6 +31,13 @@ public class driveTrain extends SubsystemBase {
 
 	private swerveDrive swerveDrive;
 
+	private NetworkTable table;
+	private NetworkTableEntry tx;
+
+	private PIDController pidZ;
+	private double errorZ;
+	private double outputZ;
+
   /**
    * Creates a new driveTrain.
    */
@@ -39,7 +51,16 @@ public class driveTrain extends SubsystemBase {
 		
     swerveDrive = new swerveDrive(backRight, backLeft, frontRight, frontLeft);
     
-    gyro = new ADXRS450_Gyro();
+	gyro = new ADXRS450_Gyro();
+
+	
+	table = NetworkTableInstance.getDefault().getTable("limelight");
+
+	tx = table.getEntry("tx");
+
+	pidZ = new PIDController(0.01, 0.005, 0);
+
+	errorZ = 0.0;
   }
 
   @Override
@@ -78,5 +99,17 @@ public class driveTrain extends SubsystemBase {
 
 	public void Drive(double x, double y, double z, double governer) {
 		swerveDrive.drive(x*governer, y*governer, z*governer);
+		
+		SmartDashboard.putNumber("LimelightX", tx.getDouble(0.0));
+	}
+
+	public void ZAlign(double x, double y){
+		SmartDashboard.putNumber("LimelightX", tx.getDouble(0.0));
+
+		errorZ = pidZ.calculate(tx.getDouble(0.0), 0);
+		
+		outputZ = MathUtil.clamp(errorZ, -0.5, 0.5);
+
+		swerveDrive.drive(-y, x, outputZ);
 	}
 }
