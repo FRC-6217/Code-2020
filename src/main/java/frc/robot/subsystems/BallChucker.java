@@ -19,25 +19,20 @@ public class BallChucker extends SubsystemBase {
   private VictorSPX intake;
   
   public BallChucker() {
-<<<<<<< HEAD
-    topMotor = new VictorSPX(Constants.BALL_CHUCKER_CONSTANTS.TOP_MOTOR);
-    botMotor = new VictorSPX(Constants.BALL_CHUCKER_CONSTANTS.BOTTEM_MOTOR);
-=======
     topMotor = new VictorSPX(Constants.BC_TOP_MOTOR);
     botMotor = new VictorSPX(Constants.BC_BOTTEM_MOTOR);
     intake = new VictorSPX(Constants.BC_INTAKE_TO_SHOOTER);
->>>>>>> e0709cac14f6b57d52bd01bbcc09bd2bb85a9eda
   }
 
 
   public void runFow(){
-    topMotor.set(ControlMode.PercentOutput, Constants.BALL_CHUCKER_CONSTANTS.SPEED);
-    botMotor.set(ControlMode.PercentOutput, -Constants.BALL_CHUCKER_CONSTANTS.SPEED);
+    topMotor.set(ControlMode.PercentOutput, Constants.BC_SPEED);
+    botMotor.set(ControlMode.PercentOutput, -Constants.BC_SPEED);
   }
 
   public void runBac(){
-    topMotor.set(ControlMode.PercentOutput, -Constants.BALL_CHUCKER_CONSTANTS.SPEED);
-    botMotor.set(ControlMode.PercentOutput, Constants.BALL_CHUCKER_CONSTANTS.SPEED);
+    topMotor.set(ControlMode.PercentOutput, -Constants.BC_SPEED);
+    botMotor.set(ControlMode.PercentOutput, Constants.BC_SPEED);
   }
 
   public void stop(){

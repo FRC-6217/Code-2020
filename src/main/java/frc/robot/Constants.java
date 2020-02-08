@@ -17,17 +17,9 @@ package frc.robot;
  */
 public final class Constants {
     //Ball Angler constants
-<<<<<<< HEAD
-    public static final int BA_LEFT_MOTOR = 51;
-    public static final int BA_RIGHT_MOTOR = 53;
-    public static final double BA_SPEED = .5;
-
-    //Ball chucker constants
-    public class BALL_CHUCKER_CONSTANTS {
-=======
     public static final int BA_LEFT_MOTOR = 42;
     public static final int BA_RIGHT_MOTOR = 45;
-    public static final double BA_SPEED = .5;
+    public static final double BA_SPEED = .1;
 
     //Ball chucker constants
     public static final int BC_TOP_MOTOR = 25;
@@ -35,13 +27,6 @@ public final class Constants {
     public static final int BC_INTAKE_TO_SHOOTER = 52;
     public static final double BC_SPEED = 0.8;
     public static final double BC_INTAKE_SPEED = .5;
->>>>>>> e0709cac14f6b57d52bd01bbcc09bd2bb85a9eda
-
-        public static final int TOP_MOTOR = 50;
-        public static final int BOTTEM_MOTOR = 52;
-        public static final double SPEED = 0.8;
-
-    }
 
     //Declaration of Button Mapping ports
     public static final int XBOX_PORT = 1;
@@ -50,6 +35,29 @@ public final class Constants {
     public static final int BALL_CHUCKER_BUTTON_INTAKE = 3; //(x) button for now
     public static final int BALL_ANGLER_BUTTON_UP = 5; //(LB) button for now
     public static final int BALL_ANGLER_BUTTON_DOWN = 6; //(RB) button for now
+    public class SHOOTER_INTAKE_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID = 52;
+        public static final double SPEED = 1;
+        public static final boolean IS_NEGATED = true;
+    }
+    public class NOT_SHOOTER_INTAKE_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID = 52;
+        public static final double SPEED = 1;
+        public static final boolean IS_NEGATED = false;
+    }
+    public class ARM_LIFT_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID_LEFT = 42;
+        public static final int MOTOR_CONTROLLER_ID_RIGHT = 45;
+        public static final double SPEED = .3;
+        public static final boolean IS_NEGATED_LEFT = false;
+        public static final boolean IS_NEGATED_RIGHT = false;
+    }
+    public class SHOOTER_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID_TOP = 25;
+        public static final int MOTOR_CONTROLLER_ID_BOTTOM = 26;
+        public static final boolean IS_NEGATED_TOP = true;
+        public static final boolean IS_NEGATED_BOTTOM = false;
+    }
 }
 
 
