@@ -17,12 +17,25 @@ package frc.robot;
  */
 public final class Constants {
     //Ball Angler constants
+<<<<<<< HEAD
     public static final int BA_LEFT_MOTOR = 51;
     public static final int BA_RIGHT_MOTOR = 53;
     public static final double BA_SPEED = .5;
 
     //Ball chucker constants
     public class BALL_CHUCKER_CONSTANTS {
+=======
+    public static final int BA_LEFT_MOTOR = 42;
+    public static final int BA_RIGHT_MOTOR = 45;
+    public static final double BA_SPEED = .5;
+
+    //Ball chucker constants
+    public static final int BC_TOP_MOTOR = 25;
+    public static final int BC_BOTTEM_MOTOR = 26;
+    public static final int BC_INTAKE_TO_SHOOTER = 52;
+    public static final double BC_SPEED = 0.8;
+    public static final double BC_INTAKE_SPEED = .5;
+>>>>>>> e0709cac14f6b57d52bd01bbcc09bd2bb85a9eda
 
         public static final int TOP_MOTOR = 50;
         public static final int BOTTEM_MOTOR = 52;
@@ -34,8 +47,9 @@ public final class Constants {
     public static final int XBOX_PORT = 1;
     public static final int BALL_CHUCKER_BUTTON_FORWARD = 1; //(a) button for now
     public static final int BALL_CHUCKER_BUTTON_BACKWARD = 2; //(b) button for now
-    public static final int BALL_ANGLER_BUTTON_UP = 3; //(x) button for now
-    public static final int BALL_ANGLER_BUTTON_DOWN = 4; //(y) button for now
+    public static final int BALL_CHUCKER_BUTTON_INTAKE = 3; //(x) button for now
+    public static final int BALL_ANGLER_BUTTON_UP = 5; //(LB) button for now
+    public static final int BALL_ANGLER_BUTTON_DOWN = 6; //(RB) button for now
 }
 
 

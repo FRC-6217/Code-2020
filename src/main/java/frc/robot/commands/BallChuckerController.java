@@ -22,7 +22,7 @@ public class BallChuckerController extends CommandBase {
   private boolean forward;
   private boolean backward;
 
-  public BallChuckerController(BallChucker bc, JoystickButton forwards, JoystickButton backwards) {
+  public BallChuckerController(BallChucker bc, JoystickButton forwards, JoystickButton backwards, JoystickButton intake) {
     this.forwards = forwards;
     this.backwards = backwards;
     this.m_bc = bc;
