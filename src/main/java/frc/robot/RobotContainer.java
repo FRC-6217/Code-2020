@@ -31,6 +31,7 @@ public class RobotContainer {
   //Buttons (lots and lots of buttons)
   private static final JoystickButton m_BallChuckerForwButton = new JoystickButton(m_xbox, Constants.BALL_CHUCKER_BUTTON_FORWARD);
   private static final JoystickButton m_BallChuckerBackButton = new JoystickButton(m_xbox, Constants.BALL_CHUCKER_BUTTON_BACKWARD);
+  private static final JoystickButton m_BallChuckerIntakeButton = new JoystickButton(m_xbox, Constants.BALL_CHUCKER_BUTTON_INTAKE);
   private static final JoystickButton m_BallAnglerUpButton = new JoystickButton(m_xbox, Constants.BALL_ANGLER_BUTTON_UP);
   private static final JoystickButton m_BallAnglerDownButton = new JoystickButton(m_xbox, Constants.BALL_ANGLER_BUTTON_DOWN);
   
@@ -39,7 +40,7 @@ public class RobotContainer {
   private static final BallAngler m_BallAngler = new BallAngler();
 
   //commands
-  private static final BallChuckerController m_BallChuckerController = new BallChuckerController(m_BallChucker, m_BallChuckerForwButton, m_BallChuckerBackButton);
+  private static final BallChuckerController m_BallChuckerController = new BallChuckerController(m_BallChucker, m_BallChuckerForwButton, m_BallChuckerBackButton, m_BallChuckerIntakeButton);
   private static final BallAnglerController m_BallAnglerController = new BallAnglerController(m_BallAngler, m_BallAnglerUpButton, m_BallAnglerDownButton);
 
 
