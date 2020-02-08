@@ -11,83 +11,153 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BallShooterConstants;
+import frc.robot.Constants.BALL_SHOOTER_CONSTANTS;
 
-public class ballShooter extends SubsystemBase {
+public class BallShooter extends SubsystemBase {
   /**
    * Creates a new ballShooter.
    */
   private CANSparkMax topMotor;
   private CANSparkMax bottomMotor;
-  private double bottomRPM = 0;
   private double topRPM = 0;
+  private double bottomRPM = 0;
+  private double topDirection = 1;
+  private double bottomDirection = 1;
 
   private CANEncoder topEncoder;
   private CANEncoder bottomEncoder;
   private CANPIDController topPID;
   private CANPIDController bottomPID;
 
-  public ballShooter() {
-    topMotor = new CANSparkMax(BallShooterConstants.TOP_CAN_ID, MotorType.kBrushless);
-    bottomMotor = new CANSparkMax(BallShooterConstants.BOTTOM_CAN_ID, MotorType.kBrushless);
+  private double kP;
+  private double kI;
+  private double kD;
+  private double kIz;
+  private double kFF;
+  private double kMinOutput;
+  private double kMaxOutput;
+
+  public BallShooter() {
+    //Shooter Motors
+    topMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_TOP, MotorType.kBrushless);
+    bottomMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_BOTTOM, MotorType.kBrushless);
+
+    //Reverse
+    if (BALL_SHOOTER_CONSTANTS.IS_NEGATED_TOP) {
+      topDirection = -1;
+    }
+    if (BALL_SHOOTER_CONSTANTS.IS_NEGATED_BOTTOM) {
+      bottomDirection = -1;
+    }
+    
+    //Reset CAN Motor controllers
     topMotor.restoreFactoryDefaults();
     bottomMotor.restoreFactoryDefaults();
+
+    //Set Idle Mode
+    topMotor.setIdleMode(IdleMode.kBrake);
+    bottomMotor.setIdleMode(IdleMode.kBrake);
+    
+    //Shooter Encoders
     topEncoder = topMotor.getEncoder();
     bottomEncoder = bottomMotor.getEncoder();
+
+    //Set PID constants
+    kP = BALL_SHOOTER_CONSTANTS.KP;
+    kI = BALL_SHOOTER_CONSTANTS.KI;
+    kD = BALL_SHOOTER_CONSTANTS.KD;
+    kIz = BALL_SHOOTER_CONSTANTS.KIZ;
+    kFF = BALL_SHOOTER_CONSTANTS.KFF;
+    kMinOutput = BALL_SHOOTER_CONSTANTS.KMINOUTPUT;
+    kMaxOutput = BALL_SHOOTER_CONSTANTS.KMAXOUTPUT;
+  
+
+    //Shooter PIDs
     topPID = topMotor.getPIDController();
     bottomPID = bottomMotor.getPIDController();
-    setPID();
+    setPID(topPID);
+    setPID(bottomPID);
   }
-  public void turnOnShooter() {
-    topPID.setReference(-topRPM, ControlType.kVelocity);
-    bottomPID.setReference(bottomRPM, ControlType.kVelocity);
-    //topMotor.set(-topRPM);
-    //bottomMotor.set(bottomRPM);
 
+  //Activate Shooter
+  public void on(double topRPM, double bottomRPM) {
+    topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
+    bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
   }
-  public void turnOffShooter() {
-    //topMotor.set(0);
-   // bottomMotor.set(0);
-    topPID.setReference(0, ControlType.kVelocity);
-    bottomPID.setReference(0, ControlType.kVelocity);
+
+  //Deactivate Shooter
+  public void off() {
+    topMotor.set(0);
+    bottomMotor.set(0);
   }
  
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    topRPM = SmartDashboard.getNumber("set top RPM", 0);
-    bottomRPM = SmartDashboard.getNumber("set bottom RPM", 0);
-    SmartDashboard.putNumber("actual top RPM", topEncoder.getVelocity());
-    SmartDashboard.putNumber("actual bottom RPM", bottomEncoder.getVelocity());
+    //Print Current Velocity of Both Motors
+    SmartDashboard.putNumber("Top RPM", topEncoder.getVelocity());
+    SmartDashboard.putNumber("Bottom RPM", bottomEncoder.getVelocity());
   }
-  private void setPID() {
-    double kP = 0.1;
-    double kI = 0;
-    double kD = 0;
-    double kIz = 0;
-    double kFF = 0;
-    double kMinOutput = -1;
-    double kMaxOutput = 1;
 
-    topPID.setP(kP);
-    topPID.setI(kI);
-    topPID.setD(kD);
-    topPID.setIZone(kIz);
-    topPID.setFF(kFF);
-    topPID.setOutputRange(kMinOutput, kMaxOutput);
-    
-    bottomPID.setP(kP);
-    bottomPID.setI(kI);
-    bottomPID.setD(kD);
-    bottomPID.setIZone(kIz);
-    bottomPID.setFF(kFF);
-    bottomPID.setOutputRange(kMinOutput, kMaxOutput);
+  public void enableTuning(){
+    SmartDashboard.putNumber("KpShooter", kP);
+    SmartDashboard.putNumber("KiShooter", kI);
+    SmartDashboard.putNumber("KdShooter", kD);
+    SmartDashboard.putNumber("IzShooter", kIz);
+    SmartDashboard.putNumber("FfShooter", kFF);
+    SmartDashboard.putNumber("MaxInShooter", kMaxOutput);
+    SmartDashboard.putNumber("MinInShooter", kMinOutput);
+  }
 
+  public void updatePID(){
+    boolean isUpdated = false;
 
+    if(SmartDashboard.getNumber("KpShooter", 0) != kP){
+      kP = SmartDashboard.getNumber("KpShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KiShooter", 0) != kI){
+      kI = SmartDashboard.getNumber("KiShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KdShooter", 0) != kD){
+      kD = SmartDashboard.getNumber("KdShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("IzShooter", 0) != kIz){
+      kIz = SmartDashboard.getNumber("IzShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("FfShooter", 0) != kFF){
+      kFF = SmartDashboard.getNumber("FfShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("MaxInShooter", 0) != kMaxOutput){
+      kMaxOutput = SmartDashboard.getNumber("MaxInShooter", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("MinInShooter", 0) != kMinOutput){
+      kMinOutput = SmartDashboard.getNumber("MinInShooter", 0);
+      isUpdated = true;  
+    }
+
+    if(isUpdated){
+      setPID(topPID);
+      setPID(bottomPID);
+    }
+  }
+
+  private void setPID(CANPIDController pid) {
+    pid.setP(kP);
+    pid.setI(kI);
+    pid.setD(kD);
+    pid.setIZone(kIz);
+    pid.setFF(kFF);
+    pid.setOutputRange(kMinOutput, kMaxOutput);
   }
 }

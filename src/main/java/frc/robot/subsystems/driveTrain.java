@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.libraries.swerve.swerveDrive;
 import frc.robot.libraries.swerve.wheelDrive;
 
-public class driveTrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
   
   private wheelDrive backRight;
 	private wheelDrive backLeft;
@@ -29,7 +29,7 @@ public class driveTrain extends SubsystemBase {
   /**
    * Creates a new driveTrain.
    */
-  public driveTrain() {
+  public DriveTrain() {
 
     backRight = new wheelDrive(22, 41, 2);
 	backLeft = new wheelDrive(23, 42, 3);

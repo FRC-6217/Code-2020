@@ -8,55 +8,60 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ballShooter;
+import frc.robot.subsystems.NotShooterIntake;
 
-public class ShooterCommand extends CommandBase {
+public class NotShooterIntakeCommand extends CommandBase {
+  NotShooterIntake notShooterIntake;
+public static enum STATE {
+  FORWARDS,
+  REVERSE,
+  OFF
+
+};
+STATE state;
   /**
-   * Creates a new ShooterCommand.
+   * Creates a new NotShooterIntakeCommand.
    */
-  public static enum control {
-    ENABLE,
-    DISABLE
-  }
-  private control ctrl;
-  private ballShooter bs;
-  public ShooterCommand(ballShooter bs, control ctrl) {
+  public NotShooterIntakeCommand(NotShooterIntake notIntake, STATE state) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.ctrl = ctrl;
-    this.bs = bs;
-    addRequirements(bs);
+    addRequirements(notIntake);
+    notShooterIntake = notIntake;
+    this.state = state;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ctrl == control.DISABLE){
-      bs.turnOffShooter();
-    
-    } 
-    else {
-      bs.turnOnShooter();
+    switch (state) {
+      case FORWARDS:
+        notShooterIntake.on();
+        break;
+      case REVERSE:
+        notShooterIntake.reverseOn();
+        break;
+      case OFF:
+        notShooterIntake.off();
+        break;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    notShooterIntake.off();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (ctrl == control.DISABLE) {
-      return true;
-    }
+    if (state == STATE.OFF)
+    return true;
     return false;
   }
 }

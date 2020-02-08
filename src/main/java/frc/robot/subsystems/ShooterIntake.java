@@ -10,35 +10,31 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SHOOTER_INTAKE_CONSTANTS;
 
-
-
-public class IntakeSystem extends SubsystemBase {
+public class ShooterIntake extends SubsystemBase {
+  VictorSPX shooterIntakeMotor;
+  int direction = 1;
   /**
-   * Creates a new IntakeSystem.
+   * Creates a new ShooterIntake.
    */
-  private VictorSPX intake;
-  private double intakeSpd = 0;
-  
-  public IntakeSystem() {
-    intake = new VictorSPX(SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID);
-  }
-  public boolean shoot(boolean override) {
-    intake.set(ControlMode.PercentOutput, intakeSpd);
+  public ShooterIntake() {
+    shooterIntakeMotor = new VictorSPX(SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID);
+    if (SHOOTER_INTAKE_CONSTANTS.IS_NEGATED) {
+      direction = -1;
+    }
 
-
-    return true;
-  }
-  public void turnOffIntake()  {
-    intake.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    intakeSpd = SmartDashboard.getNumber("intakeSpeed", 0);
+  }
+  public void on() {
+    shooterIntakeMotor.set(ControlMode.PercentOutput, direction*SHOOTER_INTAKE_CONSTANTS.SPEED);
+  }
+  public void off() {
+    shooterIntakeMotor.set(ControlMode.PercentOutput, 0);
   }
 }

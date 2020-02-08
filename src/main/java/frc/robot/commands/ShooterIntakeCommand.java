@@ -8,40 +8,52 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.ShooterIntake;
 
-public class RealShootCommand extends CommandBase {
+public class ShooterIntakeCommand extends CommandBase {
+  ShooterIntake shooterIntake;
+  boolean isOn;
   /**
-   * Creates a new RealShootCommand.
+   * Creates a new ShooterIntakeCommand.
    */
-  IntakeSystem intake;
-  public RealShootCommand(IntakeSystem intake) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public ShooterIntakeCommand(ShooterIntake intake, boolean onOff) {
     addRequirements(intake);
-    this.intake = intake;
+    shooterIntake = intake;
+    this.isOn = onOff;
+
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.shoot(true);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if (isOn) {
+      shooterIntake.on();
+
+    }
+    else {
+      shooterIntake.off();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.turnOffIntake();
+    shooterIntake.off();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (!isOn) {
+      return true;
+    }
     return false;
   }
 }

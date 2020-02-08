@@ -11,13 +11,18 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.commands.JoyDrive;
-import frc.robot.commands.RealShootCommand;
-import frc.robot.commands.ShooterCommand;
-import frc.robot.commands.ShooterCommand.control;
 import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.ballShooter;
-import frc.robot.subsystems.driveTrain;
+import frc.robot.commands.ArmLiftCommand;
+import frc.robot.commands.BallShooterCommand;
+import frc.robot.commands.JoyDriveCommand;
+import frc.robot.commands.NotShooterIntakeCommand;
+import frc.robot.commands.ShooterIntakeCommand;
+import frc.robot.commands.NotShooterIntakeCommand.STATE;
+import frc.robot.subsystems.ArmLift;
+import frc.robot.subsystems.BallShooter;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.NotShooterIntake;
+import frc.robot.subsystems.ShooterIntake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,25 +34,21 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final driveTrain m_driveTrain = new driveTrain();
-  private final ballShooter m_BallShooter = new ballShooter();
-  private final IntakeSystem m_IntakeSystem = new IntakeSystem();
-  private final Joystick joy = new Joystick(0);
+  //Joysticks
+  private final Joystick driveStick = new Joystick(Constants.DRIVESTICK_PORT);
+  private final XboxController xbox = new XboxController(Constants.XBOX_PORT);
 
-  private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain, joy);
-  private final XboxController m_XboxController = new XboxController(1);
-  private final ShooterCommand m_ShooterCommandTurnOff = new ShooterCommand(m_BallShooter, control.DISABLE);
-  private final ShooterCommand m_ShooterCommandTurnOn = new ShooterCommand(m_BallShooter, control.ENABLE);
-  private final RealShootCommand m_RealShooter = new RealShootCommand(m_IntakeSystem);
+  // Subsystems
+  private final DriveTrain driveTrain = new DriveTrain();
+  private final ArmLift armLift = new ArmLift();
+  private final ShooterIntake shooterIntake = new ShooterIntake();
+  private final NotShooterIntake notShooterIntake = new NotShooterIntake();
+  private final BallShooter ballShooter = new BallShooter();
 
 
-  /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     // Configure the button bindings
-    CommandScheduler.getInstance().setDefaultCommand(m_driveTrain, m_joyDrive);
+    CommandScheduler.getInstance().setDefaultCommand(driveTrain, new JoyDriveCommand(driveTrain, driveStick));
     configureButtonBindings();
   }
 
@@ -58,10 +59,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_XboxController, Button.kY.value).whenPressed(m_ShooterCommandTurnOff);
-    new JoystickButton(m_XboxController, Button.kX.value).whenPressed(m_ShooterCommandTurnOn);
-    new JoystickButton(m_XboxController, Button.kA.value).whileHeld(m_RealShooter);
-  }
+    new JoystickButton(xbox, Button.kA.value).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
+    new JoystickButton(xbox, Button.kX.value).whileHeld(new ArmLiftCommand(armLift, true));
+    new JoystickButton(xbox, Button.kY.value).whileHeld(new ArmLiftCommand(armLift, false));
+    new JoystickButton(xbox, Button.kBumperLeft.value).whenPressed(new BallShooterCommand(ballShooter, true));
+    new JoystickButton(xbox, Button.kBumperRight.value).whenPressed(new BallShooterCommand(ballShooter, false));
+    new JoystickButton(xbox, Button.kBack.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+    new JoystickButton(xbox, Button.kStart.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
+}
+
 
 
   /**
