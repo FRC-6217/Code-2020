@@ -160,8 +160,10 @@ public class driveTrain extends SubsystemBase {
 
 			pidX.setD(d10);
 		}
+		double xt = (Math.abs(tx.getDouble(0.0)) > 3) ? tx.getDouble(0.0) : 0.0;
+		errorZ = pidZ.calculate(xt, 0);
 
-		errorZ = pidZ.calculate(tx.getDouble(0.0), 0);
+		SmartDashboard.putNumber("ErrorZ", errorZ);
 		double angleGyro = GetAngle();
 		while (angleGyro > 360 || angleGyro < 0){
 			if(angleGyro > 360){
@@ -178,16 +180,16 @@ public class driveTrain extends SubsystemBase {
 		else{
 			measurementX = 0;
 		}
+		measurementX = (Math.abs(measurementX) > 5) ? measurementX : 0.0;
+		
 		SmartDashboard.putNumber("MeasurementX", measurementX);
 		SmartDashboard.putNumber("TV10", tv.getDouble(0.0));
+		
 		errorX = pidX.calculate(measurementX, 0);
 
 		outputZ = MathUtil.clamp(errorZ, -0.5, 0.5);
 		outputX = MathUtil.clamp(errorX, -0.5, 0.5);
 		SmartDashboard.putNumber("OutX", outputX);
-		
-
-		// outputX = 
 
 		swerveDrive.drive(-outputX, y, outputZ);
 	}
