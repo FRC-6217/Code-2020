@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.RealShootCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ShooterCommand.control;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ballShooter;
 import frc.robot.subsystems.driveTrain;
@@ -32,13 +30,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final driveTrain m_driveTrain = new driveTrain();
   private final ballShooter m_BallShooter = new ballShooter();
   private final IntakeSystem m_IntakeSystem = new IntakeSystem();
   private final Joystick joy = new Joystick(0);
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final JoyDrive m_joyDrive = new JoyDrive(m_driveTrain, joy);
   private final XboxController m_XboxController = new XboxController(1);
   private final ShooterCommand m_ShooterCommandTurnOff = new ShooterCommand(m_BallShooter, control.DISABLE);
@@ -75,6 +71,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
