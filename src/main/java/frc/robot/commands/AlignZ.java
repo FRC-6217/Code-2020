@@ -17,6 +17,7 @@ public class AlignZ extends CommandBase {
    */
   private final driveTrain m_driveTrain;
   private Joystick joy;
+  private double y;
 
   public AlignZ(driveTrain subsystem, Joystick joy) {
     m_driveTrain = subsystem;
@@ -29,19 +30,20 @@ public class AlignZ extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveTrain.Drive(0, 0, 0, 0);
+    // m_driveTrain.Drive(0, 0, 0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_driveTrain.ZAlign(joy.getRawAxis(1),joy.getRawAxis(0));
+    y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
+    m_driveTrain.XAlign(joy.getRawAxis(1));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveTrain.Drive(0, 0, 0, 0);
+    // m_driveTrain.Drive(0, 0, 0, 0);
   }
 
   // Returns true when the command should end.
