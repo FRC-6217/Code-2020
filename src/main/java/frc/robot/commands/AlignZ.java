@@ -8,32 +8,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.libraries.swerve.Angle;
 import frc.robot.subsystems.DriveTrain;
 
-public class JoyDriveCommand extends CommandBase {
-  private final DriveTrain driveTrain;
-
-  private Joystick joy;
-  private double x;
-  private double y;
-  private double z;
-  private boolean gyroButtonForward;
-  private boolean gyroButtonBackward;
-  private double governer;
-  
-  private boolean isReversed;
-  private double x1;
-  private double y1;
-  
+public class AlignZ extends CommandBase {
   /**
-   * Creates a new JoyDrive.
+   * Creates a new AlignZ.
    */
-  public JoyDriveCommand(DriveTrain train, Joystick joy) {
+  private final DriveTrain driveTrain;
+  private Joystick joy;
+  private double y;
+  private double x;
+  private Angle angle;
+
+  private PIDController pidZ;
+  private double errorZ;
+  private double outputZ;
+
+  public AlignZ(DriveTrain train, Joystick joy, Angle angle) {
     addRequirements(train);
 
     driveTrain = train;
     this.joy = joy;
+    this.angle = angle;    
   }
 
   // Called when the command is initially scheduled.
@@ -44,32 +44,16 @@ public class JoyDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    y = joy.getRawAxis(0);
-    x = joy.getRawAxis(1);
-    z = joy.getRawAxis(2);
-    gyroButtonForward = joy.getRawButton(5);
-    gyroButtonBackward = joy.getRawButton(6);        
-    governer = joy.getRawAxis(3);
+    //Dead zone
+    x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
+    y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
 
-    if(gyroButtonForward){
-        driveTrain.ResetGyro();
-        isReversed = false;
-    }
-    else if(gyroButtonBackward){
-        driveTrain.ResetGyro();
-        isReversed = true;
-    }
-    
-    x = (Math.abs(x) > .3 ? x : 0.0);
-    y = (Math.abs(y) > .3 ? y : 0.0);
-    z = (Math.abs(z) > .3 ? z : 0.0);
 
-    x1 = driveTrain.TransformX(x, y, isReversed);
-    y1 = driveTrain.TransformY(x, y, isReversed);
+    errorZ = pidZ.calculate(angle.getAngle(), 0);
+		
+		outputZ = MathUtil.clamp(errorZ, -1, 1);
 
-    driveTrain.Drive (-y, x, -z, Math.abs(governer-1));
-    gyroButtonForward = false;
-    gyroButtonBackward = false;
+		driveTrain.Drive(-y, x, outputZ, 0.5);
   }
 
   // Called once the command ends or is interrupted.

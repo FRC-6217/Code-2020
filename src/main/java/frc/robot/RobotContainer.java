@@ -11,15 +11,19 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.commands.AlignZ;
 import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
 import frc.robot.commands.ShooterIntakeCommand;
 import frc.robot.commands.NotShooterIntakeCommand.STATE;
+import frc.robot.libraries.swerve.Angle;
+import frc.robot.libraries.swerve.Distance;
 import frc.robot.subsystems.ArmLift;
 import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
 import frc.robot.subsystems.ShooterIntake;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,12 +41,17 @@ public class RobotContainer {
   private final Joystick driveStick = new Joystick(Constants.DRIVESTICK_PORT);
   private final XboxController xbox = new XboxController(Constants.XBOX_PORT);
 
+  //Helper classes
+  private final Angle angle = new Angle();
+  private final Distance distance = new Distance();
+
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
   private final ArmLift armLift = new ArmLift();
   private final ShooterIntake shooterIntake = new ShooterIntake();
   private final NotShooterIntake notShooterIntake = new NotShooterIntake();
   private final BallShooter ballShooter = new BallShooter();
+  private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
   public RobotContainer() {
@@ -58,6 +67,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, angle));
     new JoystickButton(xbox, Button.kA.value).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
     new JoystickButton(xbox, Button.kX.value).whileHeld(new ArmLiftCommand(armLift, true));
     new JoystickButton(xbox, Button.kY.value).whileHeld(new ArmLiftCommand(armLift, false));

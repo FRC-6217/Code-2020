@@ -7,7 +7,13 @@
 
 package frc.robot.subsystems;
 
+import javax.security.auth.PrivateCredentialPermission;
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
@@ -15,6 +21,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.libraries.swerve.WheelDrive;
 import frc.robot.Constants.DRIVE_TRAIN_CONSTANTS;
 
@@ -52,6 +59,25 @@ public class DriveTrain extends SubsystemBase {
 	private double x1;
 	private double y1;
 
+	private NetworkTable table;
+	private NetworkTableEntry tx;
+	private NetworkTableEntry ty;
+	private NetworkTableEntry tv;
+
+	private PIDController pidZ;
+	private double errorZ;
+	private double outputZ;
+
+	private PIDController pidX;
+	private double errorX;
+	private double outputX;
+
+	private double measurementX;
+
+	private double p10;
+	private double i10;
+	private double d10;
+
   /**
    * Creates a new driveTrain.
    */
@@ -70,9 +96,9 @@ public class DriveTrain extends SubsystemBase {
 	backLeft = new WheelDrive(DRIVE_TRAIN_CONSTANTS.BL_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.BL_ANGLE_MOTOR);
 	frontRight = new WheelDrive(DRIVE_TRAIN_CONSTANTS.FR_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.FR_ANGLE_MOTOR);
 	frontLeft = new WheelDrive(DRIVE_TRAIN_CONSTANTS.FL_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.FL_ANGLE_MOTOR);
-
-	//Gyro
-    gyro = new ADXRS450_Gyro();
+    
+	gyro = new ADXRS450_Gyro();
+	ResetGyro();
   }
 
   @Override
@@ -81,7 +107,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void ResetGyro(){ //had to change from ResetGryo to ResetGyro so if that wasn´t something I was supposed to change feel free to change it back
-		gyro.reset();
+		gyro.reset();		
+		// gyro.calibrate();
 	}
 
 	public double TransformX(double x, double y, boolean isReversed){

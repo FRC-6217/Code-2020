@@ -73,6 +73,11 @@ public final class Constants {
         public static final double KMAXOUTPUT = 1;
       
     }
+    public class LIME_LIGHT_CONSTANTS{
+        public static final double GOAL_HEIGHT = 79.065;
+        public static final double LIME_HEIGHT = 18.5;
+        public static final double LIME_ANGLE = 15;
+    }
 }
 
 
