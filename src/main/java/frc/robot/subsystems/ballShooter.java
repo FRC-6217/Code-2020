@@ -76,6 +76,10 @@ public class BallShooter extends SubsystemBase {
     kFF = BALL_SHOOTER_CONSTANTS.KFF;
     kMinOutput = BALL_SHOOTER_CONSTANTS.KMINOUTPUT;
     kMaxOutput = BALL_SHOOTER_CONSTANTS.KMAXOUTPUT;
+
+    if(BALL_SHOOTER_CONSTANTS.ENABLE_TUNING){
+      enableTuning();
+    }
   
 
     //Shooter PIDs
@@ -102,6 +106,10 @@ public class BallShooter extends SubsystemBase {
     //Print Current Velocity of Both Motors
     SmartDashboard.putNumber("Top RPM", topEncoder.getVelocity());
     SmartDashboard.putNumber("Bottom RPM", bottomEncoder.getVelocity());
+
+    if(BALL_SHOOTER_CONSTANTS.ENABLE_TUNING){
+      updatePID();
+    }
   }
 
   public void enableTuning(){

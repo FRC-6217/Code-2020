@@ -20,6 +20,27 @@ public final class Constants {
     public static final int DRIVESTICK_PORT = 0;
     public static final int XBOX_PORT = 1;
 
+    public class DRIVE_TRAIN_CONSTANTS{
+        public static final double LENGTH = (21.5 * 0.0254); //front to back
+        public static final double WIDTH = (24.5 * 0.0254); //Left to Right
+        
+        public static final int BR_SPEED_MOTOR = 22;
+        public static final int BL_SPEED_MOTOR = 23;
+        public static final int FR_SPEED_MOTOR = 21;
+        public static final int FL_SPEED_MOTOR = 24;
+        public static final int BR_ANGLE_MOTOR = 41;
+        public static final int BL_ANGLE_MOTOR = 42;
+        public static final int FR_ANGLE_MOTOR = 40;
+        public static final int FL_ANGLE_MOTOR = 43;
+    }
+    public class WHEEL_DRIVE_CONSTANTS{
+        public static final double MIN_ANGLE_REQUEST = -1;
+        public static final double MAX_ANGLE_REQUEST = 1;
+        public static final double MIN_VOLTAGE = 0.015625;
+        public static final double MAX_VOLTAGE = 3.25;
+        public static final double SLOPE_CONVERSION = (128/207);
+        public static final double Y_OFFSET_CONVERSION = -(209/207);
+    }
     public class SHOOTER_INTAKE_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 52;
         public static final double SPEED = 1;
@@ -42,6 +63,7 @@ public final class Constants {
         public static final int MOTOR_CONTROLLER_ID_BOTTOM = 26;
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
+        public static final boolean ENABLE_TUNING = true;
         public static final double KP = 0.1;
         public static final double KI = 0;
         public static final double KD = 0;

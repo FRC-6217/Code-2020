@@ -34,6 +34,9 @@ public class ShooterIntake extends SubsystemBase {
   public void on() {
     shooterIntakeMotor.set(ControlMode.PercentOutput, direction*SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
+  public void reverse() {
+    shooterIntakeMotor.set(ControlMode.PercentOutput, -direction*SHOOTER_INTAKE_CONSTANTS.SPEED);
+  }
   public void off() {
     shooterIntakeMotor.set(ControlMode.PercentOutput, 0);
   }

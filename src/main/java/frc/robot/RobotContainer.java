@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import frc.robot.subsystems.IntakeSystem;
 import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
