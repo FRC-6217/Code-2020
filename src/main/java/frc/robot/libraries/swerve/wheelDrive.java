@@ -27,6 +27,7 @@ public class WheelDrive {
 
     //Calculation variables to enable wheel reversal if greater than 90deg turn neseccary
     private double angleFeedback;
+    private double angleReq;
     private double rAngleReq;
     private double f1;
 	private double f2;
@@ -41,7 +42,7 @@ public class WheelDrive {
 
         //Create PID loops
         //speedPID = new PIDController(1, 0.5, 0, 0.02);
-        anglePID = new PIDController(1, 0.5, 0, 0.02);
+        anglePID = new PIDController(1, 0.1, 0, 0.02);
 
 		//Allow Angle PID to wrap
         anglePID.enableContinuousInput(WHEEL_DRIVE_CONSTANTS.MIN_VOLTAGE, WHEEL_DRIVE_CONSTANTS.MAX_VOLTAGE);
@@ -60,8 +61,12 @@ public class WheelDrive {
         /*
         Enables wheels to reverse direction if magnitute of turn angle is greater than 90deg
         */        
-        //reverse requested angle across circle and Wrap back to 0-360 if exceded
-        rAngleReq = angle + 180;
+        // //reverse requested angle across circle and Wrap back to 0-360 if exceded
+        angleReq = angle;
+        angleReq *= 180;
+        angleReq += 180;
+        
+        rAngleReq = angleReq + 180;
 		rAngleReq = (rAngleReq > 360 ) ? rAngleReq - 360 : rAngleReq;
 
         //Convert Current angle encoder from MIN_VOLTS - MAX_VOLTS to -1 - 1 so as to match requested value
@@ -73,8 +78,8 @@ public class WheelDrive {
         //f1 = clock wise
         //f2 = ccw
         //Requires next step to provide actual distances
-		f1 = angleFeedback - angle;
-		f2 = angle - angleFeedback;
+		f1 = angleFeedback - angleReq;
+		f2 = angleReq - angleFeedback;
         
         //Wrap Negative values to postive
         //f1 and f2 will now represent distance between Requested and Current angle going either direction around the circle 
@@ -113,16 +118,16 @@ public class WheelDrive {
 
         //If driving is reversed, set angle request to the reversed angle request
         if(!isF){
-            angle = rAngleReq;
+            angleReq = rAngleReq;
         }
 
         //Convert angle request from -1 - 1 to MIN_VOLTS - MAX_VOLTS
-        angle -= WHEEL_DRIVE_CONSTANTS.Y_OFFSET_CONVERSION;
-        angle /= WHEEL_DRIVE_CONSTANTS.SLOPE_CONVERSION;
+        angleReq -= WHEEL_DRIVE_CONSTANTS.Y_OFFSET_CONVERSION;
+        angleReq /= WHEEL_DRIVE_CONSTANTS.SLOPE_CONVERSION;
         
 
         //Calculate Error
-        double angleOut = anglePID.calculate(angleEnc.getVoltage(), angle);
+        double angleOut = anglePID.calculate(angleEnc.getVoltage(), angleReq);
         MathUtil.clamp(angleOut, -1, 1);
         
         //Set motors

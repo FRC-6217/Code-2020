@@ -38,8 +38,8 @@ public final class Constants {
         public static final double MAX_ANGLE_REQUEST = 1;
         public static final double MIN_VOLTAGE = 0.015625;
         public static final double MAX_VOLTAGE = 3.25;
-        public static final double SLOPE_CONVERSION = (128/207);
-        public static final double Y_OFFSET_CONVERSION = -(209/207);
+        public static final double SLOPE_CONVERSION = 360.0/3.09375;//(128.0/207.0);
+        public static final double Y_OFFSET_CONVERSION = -(1800/99);//-(209.0 / 207.0);
     }
     public class SHOOTER_INTAKE_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 52;

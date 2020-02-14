@@ -140,6 +140,9 @@ public class DriveTrain extends SubsystemBase {
 		x *= governer;
 		y *= governer;
 		z *= governer;
+		SmartDashboard.putNumber("xSpeed", x);
+		SmartDashboard.putNumber("ySpeed", y);
+		SmartDashboard.putNumber("zSpeed", z);
 
 		 // //pass joystick requests into chassisSpeed object.
         // speeds = new ChassisSpeeds(x, y, z);
@@ -201,6 +204,6 @@ public class DriveTrain extends SubsystemBase {
 		backRight.drive(backRightSpeed , backRightAngle);
 		backLeft.drive(backLeftSpeed , backLeftAngle);
 		frontRight.drive(frontRightSpeed , frontRightAngle);
-		frontLeft.drive(frontLeftSpeed , frontLeftAngle);
+		frontLeft.drive(-frontLeftSpeed , frontLeftAngle);
 	}
 }

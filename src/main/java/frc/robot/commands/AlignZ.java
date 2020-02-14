@@ -33,7 +33,9 @@ public class AlignZ extends CommandBase {
 
     driveTrain = train;
     this.joy = joy;
-    this.angle = angle;    
+    this.angle = angle;
+
+    pidZ = new PIDController(0.5, 0, 0);
   }
 
   // Called when the command is initially scheduled.
@@ -48,12 +50,14 @@ public class AlignZ extends CommandBase {
     x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
     y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
 
-
-    errorZ = pidZ.calculate(angle.getAngle(), 0);
-		
-		outputZ = MathUtil.clamp(errorZ, -1, 1);
-
-		driveTrain.Drive(-y, x, outputZ, 0.5);
+    if(!(angle.getAngle() == Double.NaN)){
+      errorZ = pidZ.calculate(angle.getAngle(), 0);	
+		  outputZ = MathUtil.clamp(errorZ, -1, 1);
+      driveTrain.Drive(-y, x, outputZ, 0.5);
+    }
+    else{
+      driveTrain.Drive(-y, x, 0, 0.5);
+    }
   }
 
   // Called once the command ends or is interrupted.
