@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BallShooter;
-import frc.robot.subsystems.ShooterIntake;
 
 public class BallShooterCommand extends CommandBase {
   boolean ifOn;
@@ -32,7 +31,7 @@ public class BallShooterCommand extends CommandBase {
   @Override
   public void execute() {
     //TODO make distance based
-    shooter.on(500, 500);
+    shooter.on(2000, 2000);
 
   }
 

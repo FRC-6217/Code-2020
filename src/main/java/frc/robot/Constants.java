@@ -42,7 +42,7 @@ public final class Constants {
         public static final double Y_OFFSET_CONVERSION = -(1800/99);//-(209.0 / 207.0);
     }
     public class SHOOTER_INTAKE_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 52;
+        public static final int MOTOR_CONTROLLER_ID = 51;
         public static final double SPEED = 1;
         public static final boolean IS_NEGATED = true;
     }
@@ -52,9 +52,9 @@ public final class Constants {
         public static final boolean IS_NEGATED = false;
     }
     public class ARM_LIFT_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID_LEFT = 42;
-        public static final int MOTOR_CONTROLLER_ID_RIGHT = 45;
-        public static final double SPEED = .3;
+        public static final int MOTOR_CONTROLLER_ID_LEFT = 46;
+        public static final int MOTOR_CONTROLLER_ID_RIGHT = 53;
+        public static final double SPEED = .5;
         public static final boolean IS_NEGATED_LEFT = false;
         public static final boolean IS_NEGATED_RIGHT = false;
     }
@@ -64,7 +64,7 @@ public final class Constants {
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
         public static final boolean ENABLE_TUNING = true;
-        public static final double KP = 0.1;
+        public static final double KP = 0.01;
         public static final double KI = 0;
         public static final double KD = 0;
         public static final double KIZ = 0;

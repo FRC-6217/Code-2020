@@ -91,8 +91,10 @@ public class BallShooter extends SubsystemBase {
 
   //Activate Shooter
   public void on(double topRPM, double bottomRPM) {
-    topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
-    bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
+    // topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
+    // bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
+    topMotor.set(-.5);
+    bottomMotor.set(.5);
   }
 
   //Deactivate Shooter

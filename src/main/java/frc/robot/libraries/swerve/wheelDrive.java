@@ -42,7 +42,7 @@ public class WheelDrive {
 
         //Create PID loops
         //speedPID = new PIDController(1, 0.5, 0, 0.02);
-        anglePID = new PIDController(1, 0.1, 0, 0.02);
+        anglePID = new PIDController(1, 0.5, 0, 0.02);
 
 		//Allow Angle PID to wrap
         anglePID.enableContinuousInput(WHEEL_DRIVE_CONSTANTS.MIN_VOLTAGE, WHEEL_DRIVE_CONSTANTS.MAX_VOLTAGE);

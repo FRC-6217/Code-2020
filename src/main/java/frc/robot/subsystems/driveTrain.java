@@ -204,6 +204,6 @@ public class DriveTrain extends SubsystemBase {
 		backRight.drive(backRightSpeed , backRightAngle);
 		backLeft.drive(backLeftSpeed , backLeftAngle);
 		frontRight.drive(frontRightSpeed , frontRightAngle);
-		frontLeft.drive(-frontLeftSpeed , frontLeftAngle);
+		frontLeft.drive(frontLeftSpeed , frontLeftAngle);
 	}
 }

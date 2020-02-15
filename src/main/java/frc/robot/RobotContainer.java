@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   //Joysticks
   private final Joystick driveStick = new Joystick(Constants.DRIVESTICK_PORT);
-  private final XboxController xbox = new XboxController(Constants.XBOX_PORT);
+  private final Joystick xbox = new Joystick(Constants.XBOX_PORT);
 
   //Helper classes
   private final Angle angle = new Angle();
@@ -47,10 +47,10 @@ public class RobotContainer {
 
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
-  // private final ArmLift armLift = new ArmLift();
-  // private final ShooterIntake shooterIntake = new ShooterIntake();
-  // private final NotShooterIntake notShooterIntake = new NotShooterIntake();
-  // private final BallShooter ballShooter = new BallShooter();
+  private final ArmLift armLift = new ArmLift();
+  private final ShooterIntake shooterIntake = new ShooterIntake();
+  private final NotShooterIntake notShooterIntake = new NotShooterIntake();
+  private final BallShooter ballShooter = new BallShooter();
   private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
@@ -68,13 +68,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, angle));
-    // new JoystickButton(xbox, Button.kA.value).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
-    // new JoystickButton(xbox, Button.kX.value).whileHeld(new ArmLiftCommand(armLift, true));
-    // new JoystickButton(xbox, Button.kY.value).whileHeld(new ArmLiftCommand(armLift, false));
-    // new JoystickButton(xbox, Button.kBumperLeft.value).whenPressed(new BallShooterCommand(ballShooter, true));
-    // new JoystickButton(xbox, Button.kBumperRight.value).whenPressed(new BallShooterCommand(ballShooter, false));
-    // new JoystickButton(xbox, Button.kBack.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
-    // new JoystickButton(xbox, Button.kStart.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
+    new JoystickButton(xbox, 1).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
+    new JoystickButton(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
+    new JoystickButton(xbox, 3).whileHeld(new ArmLiftCommand(armLift, false));
+    new JoystickButton(xbox, 4).whenPressed(new BallShooterCommand(ballShooter, true));
+    new JoystickButton(xbox, 5).whenPressed(new BallShooterCommand(ballShooter, false));
+    new JoystickButton(xbox, 6).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+    new JoystickButton(xbox, 7).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
 }
 
 
