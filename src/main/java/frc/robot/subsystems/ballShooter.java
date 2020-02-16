@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
@@ -63,7 +64,6 @@ public class BallShooter extends SubsystemBase {
     //Set Idle Mode
     topMotor.setIdleMode(IdleMode.kBrake);
     bottomMotor.setIdleMode(IdleMode.kBrake);
-    
     //Shooter Encoders
     topEncoder = topMotor.getEncoder();
     bottomEncoder = bottomMotor.getEncoder();
@@ -93,9 +93,10 @@ public class BallShooter extends SubsystemBase {
   public void on(double topRPM, double bottomRPM) {
     // topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
     // bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
-    topMotor.set(-.5);
-    bottomMotor.set(.5);
+    topMotor.set(-1);
+    bottomMotor.set(1);
   }
+
 
   //Deactivate Shooter
   public void off() {

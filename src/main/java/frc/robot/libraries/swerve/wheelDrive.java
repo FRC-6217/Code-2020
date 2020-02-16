@@ -119,6 +119,7 @@ public class WheelDrive {
         //If driving is reversed, set angle request to the reversed angle request
         if(!isF){
             angleReq = rAngleReq;
+            speed *= -1;
         }
 
         //Convert angle request from -1 - 1 to MIN_VOLTS - MAX_VOLTS

@@ -13,6 +13,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -204,6 +206,6 @@ public class DriveTrain extends SubsystemBase {
 		backRight.drive(backRightSpeed , backRightAngle);
 		backLeft.drive(backLeftSpeed , backLeftAngle);
 		frontRight.drive(frontRightSpeed , frontRightAngle);
-		frontLeft.drive(frontLeftSpeed , frontLeftAngle);
+		frontLeft.drive(-frontLeftSpeed , frontLeftAngle);
 	}
 }

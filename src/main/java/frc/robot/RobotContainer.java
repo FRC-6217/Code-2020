@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.commands.AlignZ;
 import frc.robot.commands.ArmLiftCommand;
+import frc.robot.commands.AutoWeekZero;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
@@ -67,7 +68,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, angle));
+    // new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, angle));
     new JoystickButton(xbox, 1).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
     new JoystickButton(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
     new JoystickButton(xbox, 3).whileHeld(new ArmLiftCommand(armLift, false));
@@ -86,6 +87,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new AutoWeekZero(ballShooter, shooterIntake);
   }
 }

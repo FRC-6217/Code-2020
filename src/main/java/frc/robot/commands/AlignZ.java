@@ -50,7 +50,7 @@ public class AlignZ extends CommandBase {
     x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
     y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
 
-    if(!(angle.getAngle() == Double.NaN)){
+    if(angle.getAngle() != Double.NaN){
       errorZ = pidZ.calculate(angle.getAngle(), 0);	
 		  outputZ = MathUtil.clamp(errorZ, -1, 1);
       driveTrain.Drive(-y, x, outputZ, 0.5);
