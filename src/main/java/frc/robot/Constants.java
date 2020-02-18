@@ -55,8 +55,8 @@ public final class Constants {
         public static final int MOTOR_CONTROLLER_ID_LEFT = 46;
         public static final int MOTOR_CONTROLLER_ID_RIGHT = 53;
         public static final double SPEED = .5;
-        public static final boolean IS_NEGATED_LEFT = false;
-        public static final boolean IS_NEGATED_RIGHT = false;
+        public static final boolean IS_NEGATED_LEFT = true;
+        public static final boolean IS_NEGATED_RIGHT = true;
     }
     public class BALL_SHOOTER_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_TOP = 25;

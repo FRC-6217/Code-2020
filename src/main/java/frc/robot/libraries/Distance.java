@@ -5,23 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.libraries.swerve;
+package frc.robot.libraries;
 
 /**
  * Add your docs here.
  */
-public class Angle {
+public class Distance {
 
-    private double angle;
+    private double distance;
 
-    public Angle(){
+    public Distance(){
     }
 
-    public void setAngle(double angle){
-        this.angle = angle;
+    public void setDistance(double distance){
+        this.distance = distance;
     }
 
-    public double getAngle(){
-        return angle;
+    public double getDistance(){
+        return distance;
     }
 }

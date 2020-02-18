@@ -12,8 +12,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.libraries.swerve.Angle;
-import frc.robot.libraries.swerve.Distance;
+import frc.robot.libraries.Angle;
+import frc.robot.libraries.Distance;
 import frc.robot.Constants.LIME_LIGHT_CONSTANTS;
 
 public class LimeLight extends SubsystemBase {

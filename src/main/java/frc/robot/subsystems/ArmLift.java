@@ -45,7 +45,7 @@ public class ArmLift extends SubsystemBase {
     rightMotor.set(ControlMode.PercentOutput, 0);
   }
   public void down() {
-    leftMotor.set(ControlMode.PercentOutput, -1*leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(ControlMode.PercentOutput, -1*rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+    leftMotor.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(ControlMode.PercentOutput, -rightDirection*ARM_LIFT_CONSTANTS.SPEED);
   }
 }
