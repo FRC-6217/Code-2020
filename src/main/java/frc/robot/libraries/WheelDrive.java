@@ -55,7 +55,9 @@ public class WheelDrive {
 
 	public void drive(double speed, double angle) {
         //Put Enc values on Smart Dashboard
-        SmartDashboard.putNumber("enc " + this.angleMotor.getDeviceID(), angleEnc.getVoltage());
+        SmartDashboard.putNumber("enc Current " + this.angleMotor.getDeviceID(), angleEnc.getVoltage());
+        SmartDashboard.putNumber("enc Request " + this.angleMotor.getDeviceID(), angle);
+        SmartDashboard.putNumber("enc speed " + this.angleMotor.getDeviceID(), speed);
         
 
         /*
@@ -119,6 +121,7 @@ public class WheelDrive {
         //If driving is reversed, set angle request to the reversed angle request
         if(!isF){
             angleReq = rAngleReq;
+            speed *= -1;
         }
 
         //Convert angle request from -1 - 1 to MIN_VOLTS - MAX_VOLTS

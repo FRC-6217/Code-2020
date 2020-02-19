@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.libraries.WheelDrive;
@@ -82,6 +83,9 @@ public class DriveTrain extends SubsystemBase {
    * Creates a new driveTrain.
    */
   public DriveTrain() {
+	SmartDashboard.putNumber("KpAlignZ", 0);
+    SmartDashboard.putNumber("KiAlignZ", 0);
+    SmartDashboard.putNumber("KdAlignZ", 0);
 	//Defines locations for swerve modules relative to center 
 	frontLeftLocation = new Translation2d(L/2, W/2);
 	frontRightLocation = new Translation2d(L/2, -W/2);
@@ -103,6 +107,8 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+	if(CommandScheduler.getInstance().requiring(this) != null)
+	SmartDashboard.putString("DriveCommand", CommandScheduler.getInstance().requiring(this).toString());
     // This method will be called once per scheduler run
   }
 
@@ -204,6 +210,6 @@ public class DriveTrain extends SubsystemBase {
 		backRight.drive(backRightSpeed , backRightAngle);
 		backLeft.drive(backLeftSpeed , backLeftAngle);
 		frontRight.drive(frontRightSpeed , frontRightAngle);
-		frontLeft.drive(frontLeftSpeed , frontLeftAngle);
+		frontLeft.drive(-frontLeftSpeed , frontLeftAngle);
 	}
 }

@@ -44,16 +44,16 @@ public class LimeLight extends SubsystemBase {
     if(tv.getDouble(0) == 1){
       SmartDashboard.putBoolean("Target Aquired", true);
 
-      angle.setAngle(tx.getDouble(Double.NaN));
+      angle.setAngle(-1*ty.getDouble(Double.POSITIVE_INFINITY));
 
-      distance.setDistance((LIME_LIGHT_CONSTANTS.GOAL_HEIGHT - LIME_LIGHT_CONSTANTS.LIME_HEIGHT)/(Math.tan(LIME_LIGHT_CONSTANTS.LIME_ANGLE + ty.getDouble(0))));
+      distance.setDistance((LIME_LIGHT_CONSTANTS.GOAL_HEIGHT - LIME_LIGHT_CONSTANTS.LIME_HEIGHT)/(Math.tan(LIME_LIGHT_CONSTANTS.LIME_ANGLE + tx.getDouble(0))));
     }
     else{
       SmartDashboard.putBoolean("Target Aquired", false);
 
-      angle.setAngle(Double.NaN);
+      angle.setAngle(Double.POSITIVE_INFINITY);
 
-      distance.setDistance(Double.NaN);
+      distance.setDistance(Double.POSITIVE_INFINITY);
     }
     // This method will be called once per scheduler run
   }

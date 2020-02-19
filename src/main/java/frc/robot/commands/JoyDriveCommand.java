@@ -83,4 +83,7 @@ public class JoyDriveCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+  public String toString(){
+    return "JoyDrive";
+  }
 }
