@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -78,6 +81,21 @@ public final class Constants {
         public static final double SPEED = 1;
         public static final boolean IS_NEGATED = true;
     }
+
+    public static class COLOR_WHEEL_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID = 27;
+        public static final double SPEED = .25;
+        public static final boolean IS_NEGATED = false;
+        public static final I2C.Port PORT = Port.kOnboard;
+    }
+    
+    public static class COLORS_CONSTANTS {
+        public static final double[] RGB_FRC_BLUE = { 0.143, 0.427, 0.429 };
+        public static final double[] RBG_FRC_GREEN = { 0.197, 0.561, 0.240 };
+        public static final double[] RBG_FRC_RED = { 0.460, 0.378, 0.161 };
+        public static final double[] RGB_FRC_YELLOW = { 0.361, 0.524, 0.113 };
+    }
+
     public class LIME_LIGHT_CONSTANTS{
         public static final double GOAL_HEIGHT = 79.065;
         public static final double LIME_HEIGHT = 18.5;

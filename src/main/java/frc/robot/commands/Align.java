@@ -68,11 +68,11 @@ public class Align extends CommandBase {
     kIY = 0; 
     kDY = 0;
 
-    updatePIDZ();
-    updatePIDY();
-
     pidZ = new PIDController(kPZ, kIZ, kDZ);
     pidY = new PIDController(kPY, kIY, kDY);
+
+    pidZ.setTolerance(0.1, 0.1);
+    pidY.setTolerance(0.1, 0.1);
     
   }
 
@@ -90,8 +90,8 @@ public class Align extends CommandBase {
     kIZ = 0; 
     kDZ = 0;
 
-    updatePIDZ();
     pidZ = new PIDController(kPZ, kIZ, kDZ);
+    pidZ.setTolerance(0.1, 0.1);
   }
 
   public Align(DriveTrain train, Joystick joy, Distance distance) {
@@ -108,8 +108,9 @@ public class Align extends CommandBase {
     kIY = 0; 
     kDY = 0;
 
-    updatePIDY();
+    // updatePIDY();
     pidY = new PIDController(kPY, kIY, kDY);
+    pidY.setTolerance(1, 1);
   }
 
   // Called when the command is initially scheduled.
@@ -132,7 +133,7 @@ public class Align extends CommandBase {
   
       double localAngle = angle.getAngle();
       if((localAngle != (Double.POSITIVE_INFINITY))){
-        if (Math.abs(localAngle) < .1 ) {
+        if (pidZ.atSetpoint()) {
           localAngle = 0;
         }      
 
@@ -153,11 +154,11 @@ public class Align extends CommandBase {
 
       double localDistance = distance.getDistance();
       if((localDistance != (Double.POSITIVE_INFINITY))){
-        if (Math.abs(localDistance) < .1 ) {
-          localDistance = 0;
+        if (pidY.atSetpoint()) {
+          localDistance = 10;
         }      
 
-        errorY = pidY.calculate(localDistance, 0);
+        errorY = pidY.calculate(localDistance, 10);
         SmartDashboard.putNumber("ErrorY", errorY);
         outputY = MathUtil.clamp(errorY, -1, 1);
 
@@ -176,10 +177,10 @@ public class Align extends CommandBase {
       double localAngle = angle.getAngle();
       double localDistance = distance.getDistance();
       if((localAngle != (Double.POSITIVE_INFINITY)) && (localDistance != (Double.POSITIVE_INFINITY))){
-        if (Math.abs(localAngle) < .1 ) {
+        if (pidZ.atSetpoint()) {
           localAngle = 0;
         }
-        if (Math.abs(localDistance) < .1 ) {
+        if (pidY.atSetpoint()) {
           localDistance = 0;
         }      
 
@@ -187,7 +188,7 @@ public class Align extends CommandBase {
         SmartDashboard.putNumber("ErrorZ", errorZ);
         outputZ = MathUtil.clamp(errorZ, -1, 1);
 
-        errorY = pidY.calculate(localDistance, 0);
+        errorY = pidY.calculate(localDistance, 10);
         SmartDashboard.putNumber("ErrorY", errorY);
         outputY = MathUtil.clamp(errorY, -1, 1);
 
@@ -257,7 +258,18 @@ public class Align extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(angleUse && distanceUse){
+      return (pidZ.atSetpoint() && pidY.atSetpoint());
+    }
+    else if(angleUse && !distanceUse){
+      return (pidZ.atSetpoint());
+    }
+    else if(!angleUse && distanceUse){
+      return (pidY.atSetpoint());
+    }
+    else{
+      return true;
+    }
   }
 
   public String toString(){
