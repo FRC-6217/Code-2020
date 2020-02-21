@@ -43,8 +43,8 @@ public class ArmLift extends SubsystemBase {
 		SmartDashboard.putBoolean("Limit10", limitSwitch.get());
   }
   public void up() {
-    leftMotor.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(ControlMode.PercentOutput, -rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+    leftMotor.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(ControlMode.PercentOutput, rightDirection*ARM_LIFT_CONSTANTS.SPEED);
   }
   public void off() {
     leftMotor.set(ControlMode.PercentOutput, 0);
@@ -52,8 +52,8 @@ public class ArmLift extends SubsystemBase {
   }
   public void down() {
     if(limitSwitch.get()){
-      leftMotor.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-      rightMotor.set(ControlMode.PercentOutput, rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+      leftMotor.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+      rightMotor.set(ControlMode.PercentOutput, -rightDirection*ARM_LIFT_CONSTANTS.SPEED);
   
     }
     else {
