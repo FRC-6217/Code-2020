@@ -9,39 +9,38 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.STATE;
-import frc.robot.subsystems.NotShooterIntake;
+import frc.robot.subsystems.Winch;
 
-public class NotShooterIntakeCommand extends CommandBase {
-  NotShooterIntake notShooterIntake;
+public class WinchCommand extends CommandBase {
   STATE state;
+  Winch winch;
   /**
-   * Creates a new NotShooterIntakeCommand.
+   * Creates a new WinchCommand.
    */
-  public NotShooterIntakeCommand(NotShooterIntake notIntake, STATE state) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(notIntake);
-    notShooterIntake = notIntake;
+  public WinchCommand(Winch winch, STATE state) {
+    addRequirements(winch);
+    this.winch = winch;
     this.state = state;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     switch (state) {
-      case FORWARDS:
-        notShooterIntake.on();
+      case UP:
+        winch.on();
         break;
-      case REVERSE:
-        notShooterIntake.reverseOn();
+      case DOWN:
+        winch.reverse();
         break;
       case OFF:
-        notShooterIntake.off();
+        winch.off();
         break;
     }
   }
@@ -49,7 +48,7 @@ public class NotShooterIntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    notShooterIntake.off();
+    winch.off();
   }
 
   // Returns true when the command should end.

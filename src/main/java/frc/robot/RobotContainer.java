@@ -11,13 +11,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants.STATE;
 import frc.robot.commands.AlignZ;
 import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
 import frc.robot.commands.ShooterIntakeCommand;
-import frc.robot.commands.NotShooterIntakeCommand.STATE;
+import frc.robot.commands.WinchCommand;
 import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
 import frc.robot.libraries.JoystickTrigger;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
 import frc.robot.subsystems.ShooterIntake;
+import frc.robot.subsystems.Winch;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -52,6 +54,7 @@ public class RobotContainer {
   private final ShooterIntake shooterIntake = new ShooterIntake();
   private final NotShooterIntake notShooterIntake = new NotShooterIntake();
   private final BallShooter ballShooter = new BallShooter();
+  private final Winch winch = new Winch();
   private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
@@ -75,6 +78,8 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
     new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
     new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
+    new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
+    new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
     new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
     new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
 }

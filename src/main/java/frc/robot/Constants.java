@@ -48,7 +48,7 @@ public final class Constants {
     }
     public class NOT_SHOOTER_INTAKE_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 52;
-        public static final double SPEED = 1;
+        public static final double SPEED = .75;
         public static final boolean IS_NEGATED = false;
     }
     public class ARM_LIFT_CONSTANTS{
@@ -73,11 +73,24 @@ public final class Constants {
         public static final double KMAXOUTPUT = 1;
       
     }
+    public class WINCH_CONSTANTS{
+        public static final int MOTOR_CONTROLLER_ID = 45;
+        public static final double SPEED = .5;
+        public static final boolean IS_NEGATED = false;
+    }
     public class LIME_LIGHT_CONSTANTS{
         public static final double GOAL_HEIGHT = 79.065;
         public static final double LIME_HEIGHT = 18.5;
         public static final double LIME_ANGLE = 15;
     }
+    public static enum STATE {
+        UP,
+        DOWN,
+        FORWARDS,
+        REVERSE,
+        OFF
+      
+      };
 }
 
 

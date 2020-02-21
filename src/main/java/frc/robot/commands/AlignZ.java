@@ -35,8 +35,7 @@ public class AlignZ extends CommandBase {
   private double kP;
   private double kI;
   private double kD;
-  private double kIz;
-  private double kFF;
+  
 
   public AlignZ(DriveTrain train, Joystick joy, Angle angle) {
     addRequirements(train);
@@ -44,6 +43,10 @@ public class AlignZ extends CommandBase {
     driveTrain = train;
     this.joy = joy;
     this.angle = angle;
+
+    kP = 0;
+    kI = 0; 
+    kD = 0;
 
     updatePID();
     pidZ = new PIDController(kP, kI, kD);
@@ -58,20 +61,23 @@ public class AlignZ extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //Dead zone
     updatePID();
+    //Dead zone
     x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
     y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
     z = (Math.abs(joy.getRawAxis(2)) > .2) ? joy.getRawAxis(2) : 0.0;
       
     double localAngle = angle.getAngle();
     if((localAngle != (Double.POSITIVE_INFINITY))){
-      if (Math.abs(localAngle)<2.5) {
+      if (Math.abs(localAngle) < 5 ) {
         localAngle = 0;
       }
       
 
-      errorZ = pidZ.calculate(localAngle, 0);	
+      errorZ = pidZ.calculate(localAngle, 0);
+
+      SmartDashboard.putNumber("ErrorZ", errorZ);
+
       outputZ = MathUtil.clamp(errorZ, -1, 1);
 
       System.out.println(localAngle + "," + errorZ + "," + outputZ);
@@ -80,43 +86,35 @@ public class AlignZ extends CommandBase {
       //TODO set max speed constant
     }
     else{
-      driveTrain.Drive(-y, x, 0, 0.5);
+      driveTrain.Drive(-y, x, z, 0.5);
     }
   }
-    public void updatePID(){
-      boolean isUpdated = false;
+
+  public void updatePID(){
+    boolean isUpdated = false;
   
-      if(SmartDashboard.getNumber("KpAlignZ", 0) != kP){
-        kP = SmartDashboard.getNumber("KpAlignZ", 0);
-        isUpdated = true;  
-      }
-      if(SmartDashboard.getNumber("KiAlignZ", 0) != kI){
-        kI = SmartDashboard.getNumber("KiAlignZ", 0);
-        isUpdated = true;  
-      }
-      if(SmartDashboard.getNumber("KdAlignZ", 0) != kD){
-        kD = SmartDashboard.getNumber("KdAlignZ", 0);
-        isUpdated = true;  
-      }
-      if(SmartDashboard.getNumber("IzAlignZ", 0) != kIz){
-        kIz = SmartDashboard.getNumber("IzAlignZ", 0);
-        isUpdated = true;  
-      }
-      if(SmartDashboard.getNumber("FfAlignZ", 0) != kFF){
-        kFF = SmartDashboard.getNumber("FfAlignZ", 0);
-        isUpdated = true;  
-      }
-      
-      if(isUpdated){
-        setPID(pidZ);
-      }
+    if(SmartDashboard.getNumber("KpAlignZ", 0) != kP){
+      kP = SmartDashboard.getNumber("KpAlignZ", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KiAlignZ", 0) != kI){
+      kI = SmartDashboard.getNumber("KiAlignZ", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KdAlignZ", 0) != kD){
+      kD = SmartDashboard.getNumber("KdAlignZ", 0);
+      isUpdated = true;  
+    }
+
+    if(isUpdated){
+      setPID(pidZ);
+    }
   }
 
   private void setPID(PIDController pid) {
     pid.setP(kP);
     pid.setI(kI);
     pid.setD(kD);
-
   }
 
   // Called once the command ends or is interrupted.
