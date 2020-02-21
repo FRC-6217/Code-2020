@@ -72,7 +72,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, angle));
+    new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, distance));
 
     //Xbox Joystick
     new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));

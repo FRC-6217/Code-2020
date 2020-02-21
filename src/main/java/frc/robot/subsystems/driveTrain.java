@@ -87,7 +87,12 @@ public class DriveTrain extends SubsystemBase {
   public DriveTrain() {
 	SmartDashboard.putNumber("KpAlignZ", 0);
     SmartDashboard.putNumber("KiAlignZ", 0);
-    SmartDashboard.putNumber("KdAlignZ", 0);
+	SmartDashboard.putNumber("KdAlignZ", 0);
+	
+	SmartDashboard.putNumber("KpAlignY", 0);
+    SmartDashboard.putNumber("KiAlignY", 0);
+	SmartDashboard.putNumber("KdAlignY", 0);
+	
 	//Defines locations for swerve modules relative to center 
 	frontLeftLocation = new Translation2d(L/2, W/2);
 	frontRightLocation = new Translation2d(L/2, -W/2);
