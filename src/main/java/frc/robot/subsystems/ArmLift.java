@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ARM_LIFT_CONSTANTS;
 
@@ -18,10 +20,13 @@ public class ArmLift extends SubsystemBase {
   VictorSPX rightMotor;
   int leftDirection = 1;
   int rightDirection = 1;
+
+	private DigitalInput limitSwitch;
   /**
    * Creates a new ArmLift.
    */
   public ArmLift() {
+	  limitSwitch = new DigitalInput(0);
     leftMotor = new VictorSPX(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_LEFT);
     rightMotor = new VictorSPX(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_RIGHT);
     if (ARM_LIFT_CONSTANTS.IS_NEGATED_LEFT) {
@@ -35,17 +40,24 @@ public class ArmLift extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+		SmartDashboard.putBoolean("Limit10", limitSwitch.get());
   }
   public void up() {
-    leftMotor.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(ControlMode.PercentOutput, rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+    leftMotor.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(ControlMode.PercentOutput, -rightDirection*ARM_LIFT_CONSTANTS.SPEED);
   }
   public void off() {
     leftMotor.set(ControlMode.PercentOutput, 0);
     rightMotor.set(ControlMode.PercentOutput, 0);
   }
   public void down() {
-    leftMotor.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(ControlMode.PercentOutput, -rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+    if(limitSwitch.get()){
+      leftMotor.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+      rightMotor.set(ControlMode.PercentOutput, rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+  
+    }
+    else {
+      off();
+    }
   }
 }

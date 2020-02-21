@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.STATE;
 import frc.robot.commands.AlignZ;
 import frc.robot.commands.ArmLiftCommand;
+import frc.robot.commands.AutoWeekZero;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
@@ -93,6 +94,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return null;
+    return new AutoWeekZero(ballShooter, shooterIntake);
   }
 }
