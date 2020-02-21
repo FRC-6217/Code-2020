@@ -18,7 +18,7 @@ import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
 import frc.robot.subsystems.DriveTrain;
 
-public class AlignZ extends CommandBase {
+public class Align extends CommandBase {
   /**
    * Creates a new AlignZ.
    */
@@ -49,8 +49,34 @@ public class AlignZ extends CommandBase {
   private double kIY;
   private double kDY;
   
+  public Align(DriveTrain train, Joystick joy, Angle angle, Distance distance) {
+    addRequirements(train);
 
-  public AlignZ(DriveTrain train, Joystick joy, Angle angle) {
+    driveTrain = train;
+    this.joy = joy;
+    this.angle = angle;
+    this.distance = distance;
+
+    angleUse = true;
+    distanceUse = true;
+
+    kPZ = 0;
+    kIZ = 0; 
+    kDZ = 0;
+
+    kPY = 0;
+    kIY = 0; 
+    kDY = 0;
+
+    updatePIDZ();
+    updatePIDY();
+
+    pidZ = new PIDController(kPZ, kIZ, kDZ);
+    pidY = new PIDController(kPY, kIY, kDY);
+    
+  }
+
+  public Align(DriveTrain train, Joystick joy, Angle angle) {
     addRequirements(train);
 
     driveTrain = train;
@@ -67,7 +93,8 @@ public class AlignZ extends CommandBase {
     updatePIDZ();
     pidZ = new PIDController(kPZ, kIZ, kDZ);
   }
-  public AlignZ(DriveTrain train, Joystick joy, Distance distance) {
+
+  public Align(DriveTrain train, Joystick joy, Distance distance) {
     addRequirements(train);
 
     driveTrain = train;
@@ -113,11 +140,11 @@ public class AlignZ extends CommandBase {
         SmartDashboard.putNumber("ErrorZ", errorZ);
         outputZ = MathUtil.clamp(errorZ, -1, 1);
 
-        driveTrain.Drive(-x, y, outputZ, 0.5);
+        driveTrain.Drive(x, -y, outputZ, 0.5);
         //TODO set max speed constant
       }
       else{
-        driveTrain.Drive(-y, x, z, 0.5);
+        driveTrain.Drive(x, -y, z, 0.5);
       }
     }
   
@@ -140,6 +167,37 @@ public class AlignZ extends CommandBase {
       else{
         driveTrain.Drive(x, -y, z, 0.5);
       }
+    }
+
+    if(angleUse && distanceUse){
+      updatePIDZ();
+      updatePIDY();
+
+      double localAngle = angle.getAngle();
+      double localDistance = distance.getDistance();
+      if((localAngle != (Double.POSITIVE_INFINITY)) && (localDistance != (Double.POSITIVE_INFINITY))){
+        if (Math.abs(localAngle) < .1 ) {
+          localAngle = 0;
+        }
+        if (Math.abs(localDistance) < .1 ) {
+          localDistance = 0;
+        }      
+
+        errorZ = pidZ.calculate(localAngle, 0);
+        SmartDashboard.putNumber("ErrorZ", errorZ);
+        outputZ = MathUtil.clamp(errorZ, -1, 1);
+
+        errorY = pidY.calculate(localDistance, 0);
+        SmartDashboard.putNumber("ErrorY", errorY);
+        outputY = MathUtil.clamp(errorY, -1, 1);
+
+        driveTrain.Drive(-x, outputY, outputZ, 0.5);
+        //TODO set max speed constant
+      }
+      else{
+        driveTrain.Drive(-y, x, z, 0.5);
+      }
+
     }
 
   }
@@ -189,13 +247,6 @@ public class AlignZ extends CommandBase {
       pidY.setD(kDY);
     }
   }
-  
-
-  // private void setPID(PIDController pid) {
-  //   pid.setP(kPZ);
-  //   pid.setI(kIZ);
-  //   pid.setD(kDZ);
-  // }
 
   // Called once the command ends or is interrupted.
   @Override

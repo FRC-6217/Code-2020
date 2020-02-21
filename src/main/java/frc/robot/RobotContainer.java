@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.STATE;
-import frc.robot.commands.AlignZ;
+import frc.robot.commands.Align;
 import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.AutoWeekZero;
 import frc.robot.commands.BallShooterCommand;
@@ -72,7 +72,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, 1).whileHeld(new AlignZ(driveTrain, driveStick, distance));
+    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, distance));
 
     //Xbox Joystick
     new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
