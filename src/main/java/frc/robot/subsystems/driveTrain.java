@@ -89,7 +89,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("KiAlignZ", 0);
 	SmartDashboard.putNumber("KdAlignZ", 0);
 	
-	SmartDashboard.putNumber("KpAlignY", 0);
+	SmartDashboard.putNumber("KpAlignY", 0.1);
     SmartDashboard.putNumber("KiAlignY", 0);
 	SmartDashboard.putNumber("KdAlignY", 0);
 	

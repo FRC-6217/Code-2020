@@ -48,6 +48,9 @@ public class Align extends CommandBase {
   private double kPY;
   private double kIY;
   private double kDY;
+
+  private boolean atSetZ;
+  private boolean atSetY;
   
   public Align(DriveTrain train, Joystick joy, Angle angle, Distance distance) {
     addRequirements(train);
@@ -109,14 +112,26 @@ public class Align extends CommandBase {
     kDY = 0;
 
     // updatePIDY();
+    atSetY = false;
     pidY = new PIDController(kPY, kIY, kDY);
-    pidY.setTolerance(1, 1);
+    pidY.setTolerance(50, 1000);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    atSetY = false;
     
+    double localDistance = distance.getDistance();
+    
+    errorY = pidY.calculate(localDistance, 7);
+    SmartDashboard.putNumber("ErrorY", errorY);
+    outputY = MathUtil.clamp(errorY, -1, 1);
+
+    if(pidY.atSetpoint()){
+      atSetY = true;
+    }
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -126,7 +141,6 @@ public class Align extends CommandBase {
     x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
     y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
     z = (Math.abs(joy.getRawAxis(2)) > .2) ? joy.getRawAxis(2) : 0.0;
-
 
     if(angleUse && !distanceUse){
       updatePIDZ();
@@ -154,19 +168,28 @@ public class Align extends CommandBase {
 
       double localDistance = distance.getDistance();
       if((localDistance != (Double.POSITIVE_INFINITY))){
-        if (pidY.atSetpoint()) {
-          localDistance = 10;
+        SmartDashboard.putBoolean("At Set", pidY.atSetpoint());
+        SmartDashboard.putNumber("Velocity", pidY.getVelocityError());
+        SmartDashboard.putNumber("Position", pidY.getPositionError());
+        
+        if (atSetY) {
+          localDistance = 7;
         }      
 
-        errorY = pidY.calculate(localDistance, 10);
+        errorY = pidY.calculate(localDistance, 7);
         SmartDashboard.putNumber("ErrorY", errorY);
         outputY = MathUtil.clamp(errorY, -1, 1);
 
-        driveTrain.Drive(x, -outputY, z, 0.5);
+        atSetY = false;
+        if(pidY.atSetpoint()){
+          atSetY = true;
+        }
+
+        driveTrain.Drive(x, -outputY, -z, 0.1);
         //TODO set max speed constant
       }
       else{
-        driveTrain.Drive(x, -y, z, 0.5);
+        driveTrain.Drive(x, -y, -z, 0.5);
       }
     }
 
