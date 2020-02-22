@@ -14,8 +14,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ARM_LIFT_CONSTANTS;
+import frc.robot.Constants.STATE;
 
 public class ArmLift extends SubsystemBase {
+
+  public static enum SIDE {
+    LEFT, RIGHT, BOTH
+  }
+
   VictorSPX leftMotor;
   VictorSPX rightMotor;
   int leftDirection = 1;
@@ -60,4 +66,28 @@ public class ArmLift extends SubsystemBase {
       off();
     }
   }
+
+  public void moveArm(SIDE side, STATE state) {
+
+    if (SIDE.LEFT == side || SIDE.BOTH == side) {
+      setArmState(leftMotor, state);
+    }
+    if (SIDE.RIGHT == side || SIDE.BOTH == side)
+     setArmState(rightMotor, state);
+  }
+
+  private void setArmState(VictorSPX arm, STATE state) {
+    switch (state) {
+      case UP:
+        arm.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+        break;
+      case DOWN:
+        arm.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
+        break;
+      case OFF:
+        arm.set(ControlMode.PercentOutput, 0);
+    }
+  }
+
+
 }

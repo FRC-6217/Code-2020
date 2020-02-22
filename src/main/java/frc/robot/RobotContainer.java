@@ -24,12 +24,14 @@ import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
 import frc.robot.libraries.JoystickTrigger;
 import frc.robot.subsystems.ArmLift;
+import frc.robot.subsystems.ArmLiftSeperate;
 import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
 import frc.robot.subsystems.ShooterIntake;
 import frc.robot.subsystems.Winch;
+import frc.robot.subsystems.ArmLift.SIDE;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -51,11 +53,11 @@ public class RobotContainer {
 
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
-  //private final ArmLift armLift = new ArmLift();
-  //private final ShooterIntake shooterIntake = new ShooterIntake();
-  //private final NotShooterIntake notShooterIntake = new NotShooterIntake();
- // private final BallShooter ballShooter = new BallShooter();
-  //private final Winch winch = new Winch();
+  private final ArmLift armLift = new ArmLift();
+  private final ShooterIntake shooterIntake = new ShooterIntake();
+  private final NotShooterIntake notShooterIntake = new NotShooterIntake();
+  private final BallShooter ballShooter = new BallShooter();
+  private final Winch winch = new Winch();
   private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
@@ -72,17 +74,31 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
-
+   new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
+ 
     //Xbox Joystick
-    //new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
-   // new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
-  //  new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
-   // new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
-   // new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
-  //  new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
-   // new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
-   // new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+  
+    new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
+    new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
+    new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
+    new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
+    new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
+    new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
+    new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
+    new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+  
+
+    // arm 
+    /*
+    new JoystickButton(xbox, 1).whileHeld(new ArmLiftSeperate(armLift, SIDE.LEFT, STATE.UP));
+    new JoystickButton(xbox, 2).whileHeld(new ArmLiftSeperate(armLift, SIDE.LEFT, STATE.DOWN));
+    new JoystickButton(xbox, 3).whileHeld(new ArmLiftSeperate(armLift, SIDE.RIGHT, STATE.UP));
+    new JoystickButton(xbox, 4).whileHeld(new ArmLiftSeperate(armLift, SIDE.RIGHT, STATE.DOWN));
+
+
+    new JoystickButton(xbox, 5).whileHeld(new ArmLiftSeperate(armLift, SIDE.BOTH, STATE.UP));
+    new JoystickButton(xbox, 6).whileHeld(new ArmLiftSeperate(armLift, SIDE.BOTH, STATE.DOWN));
+    */
 }
 
 
