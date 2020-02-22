@@ -76,6 +76,14 @@ public final class Constants {
         public static final double KMAXOUTPUT = 1;
       
     }
+    public class ALIGN_COMMAND_CONSTANTS{
+        public static final double kPZ = 0;
+        public static final double kIZ = 0;
+        public static final double kDZ = 0;
+        public static final double kPY = 0;
+        public static final double kIY = 0;
+        public static final double kDY = 0;
+    }
     public class WINCH_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 45;
         public static final double SPEED = 1;
@@ -97,9 +105,9 @@ public final class Constants {
     }
 
     public class LIME_LIGHT_CONSTANTS{
-        public static final double GOAL_HEIGHT = 79.065;
+        public static final double GOAL_HEIGHT = 83.5;
         public static final double LIME_HEIGHT = 18.5;
-        public static final double LIME_ANGLE = 15;
+        public static final double LIME_ANGLE = 19.5;
     }
     public static enum STATE {
         UP,

@@ -51,11 +51,11 @@ public class RobotContainer {
 
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
-  private final ArmLift armLift = new ArmLift();
-  private final ShooterIntake shooterIntake = new ShooterIntake();
-  private final NotShooterIntake notShooterIntake = new NotShooterIntake();
-  private final BallShooter ballShooter = new BallShooter();
-  private final Winch winch = new Winch();
+  //private final ArmLift armLift = new ArmLift();
+  //private final ShooterIntake shooterIntake = new ShooterIntake();
+  //private final NotShooterIntake notShooterIntake = new NotShooterIntake();
+ // private final BallShooter ballShooter = new BallShooter();
+  //private final Winch winch = new Winch();
   private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
@@ -72,17 +72,17 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, distance));
+    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
 
     //Xbox Joystick
-    new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
-    new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
-    new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
-    new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
-    new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
-    new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
-    new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
-    new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+    //new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
+   // new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
+  //  new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
+   // new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
+   // new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
+  //  new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
+   // new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
+   // new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
 }
 
 
@@ -94,6 +94,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new AutoWeekZero(ballShooter, shooterIntake);
+  //  return new AutoWeekZero(ballShooter, shooterIntake);
+  return null;
   }
 }

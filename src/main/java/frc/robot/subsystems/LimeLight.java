@@ -28,19 +28,39 @@ public class LimeLight extends SubsystemBase {
 	private NetworkTableEntry ty;
   private NetworkTableEntry tv;
 
+  private int numClients = 0;
+
   public LimeLight(Angle angle, Distance distance) {
     this.angle = angle;
     this.distance = distance;
 
     table = NetworkTableInstance.getDefault().getTable("limelight");
-
+    table.getEntry("pipeline").setNumber(0);
   	tx = table.getEntry("tx");
 	  ty = table.getEntry("ty");
-	  tv = table.getEntry("tv");
+    tv = table.getEntry("tv");
+  }
+
+  public void limeRequired() {
+    numClients++;
+    table.getEntry("pipeline").setNumber(1);
+    /*0 	use the LED Mode set in the current pipeline
+    1 	force off*/
+  }
+  public void limeNotRequired() {
+    numClients--;
+    if (numClients == 0) {
+      table.getEntry("pipeline").setNumber(0);
+    }
+    /* 0 	Vision processor
+1 	Driver Camera (Increases exposure, disables vision processing) */
   }
 
   @Override
   public void periodic() {
+
+    SmartDashboard.putNumber("pipeline", table.getEntry("pipeline").getDouble(1000000));
+
     if(tv.getDouble(0) == 1){
       SmartDashboard.putBoolean("Target Aquired", true);
 

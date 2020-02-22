@@ -7,22 +7,23 @@
 
 package frc.robot.commands;
 
-import com.revrobotics.CANPIDController;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.Constants.ALIGN_COMMAND_CONSTANTS;
 import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.LimeLight;
 
 public class Align extends CommandBase {
   /**
    * Creates a new AlignZ.
    */
   private final DriveTrain driveTrain;
+  private LimeLight light;
   private Joystick joy;
   private double y;
   private double x;
@@ -37,17 +38,17 @@ public class Align extends CommandBase {
   private double errorZ;
   private double outputZ;
 
-  private double kPZ;
-  private double kIZ;
-  private double kDZ;
+  private double kPZ = ALIGN_COMMAND_CONSTANTS.kPZ;
+  private double kIZ = ALIGN_COMMAND_CONSTANTS.kIZ;
+  private double kDZ = ALIGN_COMMAND_CONSTANTS.kDZ;
 
   private PIDController pidY;
   private double errorY;
   private double outputY;
 
-  private double kPY;
-  private double kIY;
-  private double kDY;
+  private double kPY = ALIGN_COMMAND_CONSTANTS.kPY;
+  private double kIY = ALIGN_COMMAND_CONSTANTS.kIY;
+  private double kDY = ALIGN_COMMAND_CONSTANTS.kDY;
 
   private boolean atSetZ;
   private boolean atSetY;
@@ -62,14 +63,6 @@ public class Align extends CommandBase {
 
     angleUse = true;
     distanceUse = true;
-
-    kPZ = 0;
-    kIZ = 0; 
-    kDZ = 0;
-
-    kPY = 0;
-    kIY = 0; 
-    kDY = 0;
 
     pidZ = new PIDController(kPZ, kIZ, kDZ);
     pidY = new PIDController(kPY, kIY, kDY);
@@ -89,16 +82,15 @@ public class Align extends CommandBase {
     angleUse = true;
     distanceUse = false;
 
-    kPZ = 0;
-    kIZ = 0; 
-    kDZ = 0;
-
     pidZ = new PIDController(kPZ, kIZ, kDZ);
     pidZ.setTolerance(0.1, 0.1);
   }
 
-  public Align(DriveTrain train, Joystick joy, Distance distance) {
+  public Align(DriveTrain train, LimeLight light, Joystick joy, Distance distance) {
     addRequirements(train);
+
+    this.light = light;
+    light.limeRequired();
 
     driveTrain = train;
     this.joy = joy;
@@ -106,10 +98,6 @@ public class Align extends CommandBase {
 
     angleUse = false;
     distanceUse = true;
-
-    kPY = 0;
-    kIY = 0; 
-    kDY = 0;
 
     // updatePIDY();
     atSetY = false;
@@ -276,6 +264,7 @@ public class Align extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveTrain.Drive(0, 0, 0, 0);
+    light.limeNotRequired();
   }
 
   // Returns true when the command should end.
