@@ -31,10 +31,10 @@ public final class Constants {
         public static final int BL_SPEED_MOTOR = 23;
         public static final int FR_SPEED_MOTOR = 21;
         public static final int FL_SPEED_MOTOR = 24;
-        public static final int BR_ANGLE_MOTOR = 41;
-        public static final int BL_ANGLE_MOTOR = 42;
-        public static final int FR_ANGLE_MOTOR = 40;
-        public static final int FL_ANGLE_MOTOR = 43;
+        public static final int BR_ANGLE_MOTOR = 53;
+        public static final int BL_ANGLE_MOTOR = 45;
+        public static final int FR_ANGLE_MOTOR = 46;
+        public static final int FL_ANGLE_MOTOR = 41;
     }
     public class WHEEL_DRIVE_CONSTANTS{
         public static final double MIN_ANGLE_REQUEST = -1;
@@ -45,7 +45,7 @@ public final class Constants {
         public static final double Y_OFFSET_CONVERSION = -(1800/99);//-(209.0 / 207.0);
     }
     public class SHOOTER_INTAKE_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 51;
+        public static final int MOTOR_CONTROLLER_ID = 52;
         public static final double SPEED = 1;
         public static final boolean IS_NEGATED = true;
     }
@@ -63,7 +63,7 @@ public final class Constants {
     }
     public class BALL_SHOOTER_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_TOP = 25;
-        public static final int MOTOR_CONTROLLER_ID_BOTTOM = 26;
+        public static final int MOTOR_CONTROLLER_ID_BOTTOM = 27;
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
         public static final boolean ENABLE_TUNING = true;
@@ -85,7 +85,7 @@ public final class Constants {
         public static final double kDY = 0;
     }
     public class WINCH_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 45;
+        public static final int MOTOR_CONTROLLER_ID = 26;
         public static final double SPEED = 1;
         public static final boolean IS_NEGATED = true;
     }
@@ -109,6 +109,7 @@ public final class Constants {
         public static final double LIME_HEIGHT = 18.5;
         public static final double LIME_ANGLE = 19.5;
     }
+
     public static enum STATE {
         UP,
         DOWN,
