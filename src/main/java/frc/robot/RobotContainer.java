@@ -16,6 +16,7 @@ import frc.robot.commands.Align;
 import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.AutoWeekZero;
 import frc.robot.commands.BallShooterCommand;
+import frc.robot.commands.ColorWheelCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
 import frc.robot.commands.ShooterIntakeCommand;
@@ -26,6 +27,7 @@ import frc.robot.libraries.JoystickTrigger;
 import frc.robot.subsystems.ArmLift;
 import frc.robot.subsystems.ArmLiftSeperate;
 import frc.robot.subsystems.BallShooter;
+import frc.robot.subsystems.ColorWheel;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
@@ -58,6 +60,7 @@ public class RobotContainer {
   private final NotShooterIntake notShooterIntake = new NotShooterIntake();
   private final BallShooter ballShooter = new BallShooter();
   private final Winch winch = new Winch();
+  private final ColorWheel colorWheel = new ColorWheel();
   private final LimeLight limeLight = new LimeLight(angle, distance);
 
 
@@ -74,7 +77,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-   new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
+  //  new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
  
     //Xbox Joystick
   
@@ -82,13 +85,14 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, false));
     new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, true));
     new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));
-    new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
-    new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
+    // new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
+    // new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
     new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
     new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
+    new JoystickButton(xbox, Button.kBack.value).whileHeld(new ColorWheelCommand(colorWheel));
   
 
-    // arm 
+    // arm hn
     /*
     new JoystickButton(xbox, 1).whileHeld(new ArmLiftSeperate(armLift, SIDE.LEFT, STATE.UP));
     new JoystickButton(xbox, 2).whileHeld(new ArmLiftSeperate(armLift, SIDE.LEFT, STATE.DOWN));

@@ -7,20 +7,25 @@
 
 package frc.robot.subsystems;
 
+import java.net.CacheRequest;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.NOT_SHOOTER_INTAKE_CONSTANTS;
 
 public class NotShooterIntake extends SubsystemBase {
-  VictorSPX notShooterIntakeMotor;
+  CANSparkMax motor;
   int direction = 1;
   /**
    * Creates a new NotShooterIntake.
    */
   public NotShooterIntake() {
-    notShooterIntakeMotor = new VictorSPX(NOT_SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID);
+    motor = new CANSparkMax(Constants.NOT_SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID, MotorType.kBrushless);
     if (NOT_SHOOTER_INTAKE_CONSTANTS.IS_NEGATED) {
       direction = -1;
     }
@@ -31,12 +36,12 @@ public class NotShooterIntake extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void on() {
-    notShooterIntakeMotor.set(ControlMode.PercentOutput, direction*NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
+    motor.set(direction*NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
   public void off() {
-    notShooterIntakeMotor.set(ControlMode.PercentOutput, 0);
+    motor.set(0);
   }
   public void reverseOn() {
-    notShooterIntakeMotor.set(ControlMode.PercentOutput, -1*direction*NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
+    motor.set(-1*direction*NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
 }

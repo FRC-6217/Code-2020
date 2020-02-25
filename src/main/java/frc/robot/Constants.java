@@ -50,9 +50,9 @@ public final class Constants {
         public static final boolean IS_NEGATED = true;
     }
     public class NOT_SHOOTER_INTAKE_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 52;
-        public static final double SPEED = .75;
-        public static final boolean IS_NEGATED = false;
+        public static final int MOTOR_CONTROLLER_ID = 28;
+        public static final double SPEED = .3;
+        public static final boolean IS_NEGATED = true;
     }
     public class ARM_LIFT_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_LEFT = 46;
@@ -91,7 +91,7 @@ public final class Constants {
     }
 
     public static class COLOR_WHEEL_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 27;
+        public static final int MOTOR_CONTROLLER_ID = 29;
         public static final double SPEED = .25;
         public static final boolean IS_NEGATED = false;
         public static final I2C.Port PORT = Port.kOnboard;
