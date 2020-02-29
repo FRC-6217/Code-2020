@@ -50,13 +50,15 @@ public final class Constants {
         public static final boolean IS_NEGATED = true;
     }
     public class NOT_SHOOTER_INTAKE_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 28;
+        public static final int MOTOR_CONTROLLER_ID = 31;
         public static final double SPEED = .3;
         public static final boolean IS_NEGATED = true;
     }
     public class ARM_LIFT_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID_LEFT = 46;
-        public static final int MOTOR_CONTROLLER_ID_RIGHT = 53;
+        public static final int MOTOR_CONTROLLER_ID_LEFT = 28;
+        public static final int MOTOR_CONTROLLER_ID_RIGHT = 30;
+        public static final int LIMIT_SWITCH_ID_LEFT = 0;
+        public static final int LIMIT_SWITCH_ID_RIGHT = 1;
         public static final double SPEED = .5;
         public static final boolean IS_NEGATED_LEFT = true;
         public static final boolean IS_NEGATED_RIGHT = true;
@@ -109,6 +111,12 @@ public final class Constants {
         public static final double LIME_HEIGHT = 18.5;
         public static final double LIME_ANGLE = 19.5;
     }
+
+    public static enum SIDE {
+        LEFT,
+        RIGHT,
+        BOTH
+      };
 
     public static enum STATE {
         UP,

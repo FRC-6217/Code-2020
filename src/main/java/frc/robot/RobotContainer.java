@@ -33,7 +33,6 @@ import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
 import frc.robot.subsystems.ShooterIntake;
 import frc.robot.subsystems.Winch;
-import frc.robot.subsystems.ArmLift.SIDE;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
