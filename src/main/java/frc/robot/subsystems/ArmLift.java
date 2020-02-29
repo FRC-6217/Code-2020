@@ -33,10 +33,10 @@ public class ArmLift extends SubsystemBase {
     leftMotor = new CANSparkMax(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_LEFT, MotorType.kBrushed);
     rightMotor = new CANSparkMax(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_RIGHT, MotorType.kBrushed);
 
-    leftMotor.restoreFactoryDefaults();
-    rightMotor.restoreFactoryDefaults();
-    // leftMotor.setIdleMode(IdleMode.kBrake);
-    // rightMotor.setIdleMode(IdleMode.kBrake);
+//    leftMotor.restoreFactoryDefaults();
+//    rightMotor.restoreFactoryDefaults();
+    leftMotor.setIdleMode(IdleMode.kBrake);
+    rightMotor.setIdleMode(IdleMode.kBrake);
     
     // leftLimitDown = new DigitalInput(ARM_LIFT_CONSTANTS.LIMIT_SWITCH_ID_LEFT);
     // rightLimitDown = new DigitalInput(ARM_LIFT_CONSTANTS.LIMIT_SWITCH_ID_RIGHT);

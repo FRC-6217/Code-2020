@@ -62,8 +62,8 @@ public class BallShooter extends SubsystemBase {
     bottomMotor.restoreFactoryDefaults();
 
     //Set Idle Mode
-    topMotor.setIdleMode(IdleMode.kBrake);
-    bottomMotor.setIdleMode(IdleMode.kBrake);
+    topMotor.setIdleMode(IdleMode.kCoast);
+    bottomMotor.setIdleMode(IdleMode.kCoast);
     //Shooter Encoders
     topEncoder = topMotor.getEncoder();
     bottomEncoder = bottomMotor.getEncoder();

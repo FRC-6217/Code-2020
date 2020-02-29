@@ -7,8 +7,13 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WINCH_CONSTANTS;
@@ -17,14 +22,18 @@ public class Winch extends SubsystemBase {
   /**
    * Creates a new Winch.
    */
-  VictorSPX winch;
+  CANSparkMax winch;
   int direction = 1;
 
   public Winch() {
-    winch = new VictorSPX(WINCH_CONSTANTS.MOTOR_CONTROLLER_ID);
+    winch = new CANSparkMax(WINCH_CONSTANTS.MOTOR_CONTROLLER_ID, MotorType.kBrushless);
     if (WINCH_CONSTANTS.IS_NEGATED) {
       direction = -1;
     }
+    winch.restoreFactoryDefaults();
+
+    //Set Idle Mode
+    winch.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
@@ -33,14 +42,14 @@ public class Winch extends SubsystemBase {
   }
 
   public void on() {
-    winch.set(ControlMode.PercentOutput, direction*WINCH_CONSTANTS.SPEED);
+    winch.set(-direction*WINCH_CONSTANTS.SPEED);
   }
 
   public void reverse() {
-    winch.set(ControlMode.PercentOutput, -direction*WINCH_CONSTANTS.SPEED);
+    winch.set(direction*WINCH_CONSTANTS.SPEED);
   }
 
   public void off() {
-    winch.set(ControlMode.PercentOutput, 0);
+    winch.set(0);
   }
 }
