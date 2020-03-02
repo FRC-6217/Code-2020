@@ -34,6 +34,7 @@ public class ArmLift extends SubsystemBase {
 
     leftMotor.restoreFactoryDefaults();
     rightMotor.restoreFactoryDefaults();
+
     leftMotor.setIdleMode(IdleMode.kBrake);
     rightMotor.setIdleMode(IdleMode.kBrake);
     
@@ -51,7 +52,17 @@ public class ArmLift extends SubsystemBase {
     }
   }
 
-  public void up() {
+  public void up(){
+    leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(rightDirection * ARM_LIFT_CONSTANTS.SPEED);
+  }
+
+  public void down(){
+    leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(-rightDirection * ARM_LIFT_CONSTANTS.SPEED);
+  }
+
+  public void upLimit() {
     if(!leftLimitUp.get()) {
       leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
     }
@@ -67,7 +78,7 @@ public class ArmLift extends SubsystemBase {
     }
   }
 
-  public void down() {
+  public void downLimit() {
     if(!leftLimitDown.get()) {
       leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
     }
@@ -103,5 +114,4 @@ public class ArmLift extends SubsystemBase {
     SmartDashboard.putBoolean("Right Limit UP", rightLimitUp.get());
     SmartDashboard.putBoolean("Right Limit DOWN", rightLimitDown.get());
   }
-
 }

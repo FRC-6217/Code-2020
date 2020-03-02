@@ -8,36 +8,28 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.BALL_SHOOTER_CONSTANTS;
 
-
 public class BallShooter extends SubsystemBase {
-  /**
-   * Creates a new ballShooter.
-   */
+
   private CANSparkMax topMotor;
   private CANSparkMax bottomMotor;
-  private double topRPM = 0;
-  private double bottomRPM = 0;
   private double topDirection = 1;
   private double bottomDirection = 1;
-
   private CANEncoder topEncoder;
   private CANEncoder bottomEncoder;
+
   private CANPIDController topPID;
   private CANPIDController bottomPID;
-
+  private double topRPM = 0;
+  private double bottomRPM = 0;
   private double kP;
   private double kI;
   private double kD;
@@ -47,25 +39,22 @@ public class BallShooter extends SubsystemBase {
   private double kMaxOutput;
 
   public BallShooter() {
-    //Shooter Motors
     topMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_TOP, MotorType.kBrushless);
     bottomMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_BOTTOM, MotorType.kBrushless);
 
-    //Reverse
+    topMotor.restoreFactoryDefaults();
+    bottomMotor.restoreFactoryDefaults();
+
+    topMotor.setIdleMode(IdleMode.kCoast);
+    bottomMotor.setIdleMode(IdleMode.kCoast);
+
     if (BALL_SHOOTER_CONSTANTS.IS_NEGATED_TOP) {
       topDirection = -1;
     }
     if (BALL_SHOOTER_CONSTANTS.IS_NEGATED_BOTTOM) {
       bottomDirection = -1;
     }
-    
-    //Reset CAN Motor controllers
-    topMotor.restoreFactoryDefaults();
-    bottomMotor.restoreFactoryDefaults();
 
-    //Set Idle Mode
-    topMotor.setIdleMode(IdleMode.kCoast);
-    bottomMotor.setIdleMode(IdleMode.kCoast);
     //Shooter Encoders
     topEncoder = topMotor.getEncoder();
     bottomEncoder = bottomMotor.getEncoder();
@@ -91,29 +80,22 @@ public class BallShooter extends SubsystemBase {
   }
 
   //Activate Shooter
-  public void on(double topRPM, double bottomRPM) {
-    // topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
-    // bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
-    topMotor.set(-BALL_SHOOTER_CONSTANTS.SPEED);
-    bottomMotor.set(BALL_SHOOTER_CONSTANTS.SPEED);
+  public void on(){
+    topMotor.set(topDirection * BALL_SHOOTER_CONSTANTS.SPEED);
+    bottomMotor.set(bottomDirection * BALL_SHOOTER_CONSTANTS.SPEED);
   }
 
+  //Activate Shooter with PID
+  //Input RPM
+  public void onPID(double topRPM, double bottomRPM) {
+    topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
+    bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
+  }
 
   //Deactivate Shooter
   public void off() {
     topMotor.set(0);
     bottomMotor.set(0);
-  }
- 
-  @Override
-  public void periodic() {
-    //Print Current Velocity of Both Motors
-    SmartDashboard.putNumber("Top RPM", topEncoder.getVelocity());
-    SmartDashboard.putNumber("Bottom RPM", bottomEncoder.getVelocity());
-
-    if(BALL_SHOOTER_CONSTANTS.ENABLE_TUNING){
-      updatePID();
-    }
   }
 
   public void enableTuning(){
@@ -171,5 +153,16 @@ public class BallShooter extends SubsystemBase {
     pid.setIZone(kIz);
     pid.setFF(kFF);
     pid.setOutputRange(kMinOutput, kMaxOutput);
+  }
+
+  @Override
+  public void periodic() {
+    //Print Current Velocity of Both Motors
+    SmartDashboard.putNumber("Top RPM", topEncoder.getVelocity());
+    SmartDashboard.putNumber("Bottom RPM", bottomEncoder.getVelocity());
+
+    if(BALL_SHOOTER_CONSTANTS.ENABLE_TUNING){
+      updatePID();
+    }
   }
 }
