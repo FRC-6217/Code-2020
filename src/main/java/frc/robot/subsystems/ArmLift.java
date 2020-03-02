@@ -7,16 +7,12 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANError;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.EncoderType;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ARM_LIFT_CONSTANTS;
@@ -25,8 +21,10 @@ public class ArmLift extends SubsystemBase {
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
-  private DigitalInput leftLimitDown;
-  private DigitalInput rightLimitDown;
+  private CANDigitalInput leftLimitUp;
+  private CANDigitalInput leftLimitDown;
+  private CANDigitalInput rightLimitUp;
+  private CANDigitalInput rightLimitDown;
   private int leftDirection = 1;
   private int rightDirection = 1;
   
@@ -39,8 +37,11 @@ public class ArmLift extends SubsystemBase {
     leftMotor.setIdleMode(IdleMode.kBrake);
     rightMotor.setIdleMode(IdleMode.kBrake);
     
-    // leftLimitDown = new DigitalInput(ARM_LIFT_CONSTANTS.LIMIT_SWITCH_ID_LEFT);
-    // rightLimitDown = new DigitalInput(ARM_LIFT_CONSTANTS.LIMIT_SWITCH_ID_RIGHT);
+    leftLimitUp = leftMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+    leftLimitDown = leftMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+
+    rightLimitUp = rightMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+    rightLimitDown = rightMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     
     if (ARM_LIFT_CONSTANTS.IS_NEGATED_LEFT) {
       leftDirection = -1;
@@ -50,44 +51,57 @@ public class ArmLift extends SubsystemBase {
     }
   }
 
+  public void up() {
+    if(!leftLimitUp.get()) {
+      leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+    }
+    else{
+      leftMotor.set(0);
+    }
+
+    if(!rightLimitUp.get()){
+      rightMotor.set(rightDirection * ARM_LIFT_CONSTANTS.SPEED);
+    }
+    else{
+      rightMotor.set(0);
+    }
+  }
+
+  public void down() {
+    if(!leftLimitDown.get()) {
+      leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+    }
+    else{
+      leftMotor.set(0);
+    }
+
+    if(!rightLimitDown.get()){
+      rightMotor.set(-rightDirection * ARM_LIFT_CONSTANTS.SPEED);
+    }
+    else{
+      rightMotor.set(0);
+    }
+  }
+
+  public void off() {
+      leftMotor.set(0);
+      rightMotor.set(0);
+  }
+
+  public boolean getUpperLimits(){
+    return(leftLimitUp.get() && rightLimitUp.get());
+  }
+
+  public boolean getLowerLimits(){
+    return(leftLimitDown.get() && rightLimitDown.get());
+  }
+  
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("Left Limit UP", leftLimitUp.get());
+    SmartDashboard.putBoolean("Left Limit DOWN", leftLimitDown.get());
+    SmartDashboard.putBoolean("Right Limit UP", rightLimitUp.get());
+    SmartDashboard.putBoolean("Right Limit DOWN", rightLimitDown.get());
   }
-
-  public void up() {
-    leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(rightDirection * ARM_LIFT_CONSTANTS.SPEED);
-  }
-  public void off() {
-    leftMotor.set(0);
-    rightMotor.set(0);
-  }
-  public void down() {
-      leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
-      rightMotor.set(-rightDirection * ARM_LIFT_CONSTANTS.SPEED);
-  }
-
-  // public void moveArm(SIDE side, STATE state) {
-
-  //   if (SIDE.LEFT == side || SIDE.BOTH == side) {
-  //     setArmState(leftMotor, state);
-  //   }
-  //   if (SIDE.RIGHT == side || SIDE.BOTH == side)
-  //    setArmState(rightMotor, state);
-  // }
-
-  // private void setArmState(VictorSPX arm, STATE state) {
-  //   switch (state) {
-  //     case UP:
-  //       arm.set(ControlMode.PercentOutput, leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-  //       break;
-  //     case DOWN:
-  //       arm.set(ControlMode.PercentOutput, -leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-  //       break;
-  //     case OFF:
-  //       arm.set(ControlMode.PercentOutput, 0);
-  //   }
-  // }
-
 
 }

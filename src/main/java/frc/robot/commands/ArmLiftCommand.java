@@ -8,35 +8,45 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.STATE;
 import frc.robot.subsystems.ArmLift;
 
 public class ArmLiftCommand extends CommandBase {
   ArmLift arm;
-  boolean isDown;
-  /**
-   * Creates a new ArmLiftCommand.
-   */
-  public ArmLiftCommand(ArmLift arm, boolean isDown) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  STATE state;
+  
+  public ArmLiftCommand(ArmLift arm, STATE state) {
     addRequirements(arm);
     this.arm = arm;
-    this.isDown = isDown;
+    this.state = state;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (isDown) {
-      arm.down();
-    }
-    else {
-      arm.up();
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    switch(state) {
+      case UP:
+        arm.up();
+        break;
+      case DOWN:
+        arm.down();
+        break;
+      case OFF:
+        arm.off();
+        break;
+      case FORWARDS:
+        arm.off();
+        break;
+      case REVERSE:
+        arm.off();
+        break;
+    }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +58,18 @@ public class ArmLiftCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(state == STATE.UP && arm.getUpperLimits()){
+      return true;
+    }
+    else if(state == STATE.DOWN && arm.getLowerLimits()){
+      return true;
+    }
+    else if(state == STATE.OFF || state == STATE.FORWARDS || state == STATE.REVERSE){
+      return true;
+    }
+    else{
+      return false;
+    }
+
   }
 }

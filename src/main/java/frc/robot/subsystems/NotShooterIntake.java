@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import java.net.CacheRequest;
 
+import com.revrobotics.CANDigitalInput;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANError;
 import com.revrobotics.CANPIDController;
@@ -23,12 +24,10 @@ import frc.robot.Constants.NOT_SHOOTER_INTAKE_CONSTANTS;
 
 
 public class NotShooterIntake extends SubsystemBase {
-  CANEncoder encoder;
-  CANSparkMax motor;
-  int direction = 1;
-  /**
-   * Creates a new NotShooterIntake.
-   */
+  private CANEncoder encoder;
+  private CANSparkMax motor;
+  private int direction = 1;
+  
   public NotShooterIntake() {
     motor = new CANSparkMax(Constants.NOT_SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID, MotorType.kBrushless);
 
