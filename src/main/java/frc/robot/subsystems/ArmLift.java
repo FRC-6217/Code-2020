@@ -7,9 +7,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,8 +20,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ARM_LIFT_CONSTANTS;
-import frc.robot.Constants.STATE;
-import frc.robot.Constants.SIDE;
 
 public class ArmLift extends SubsystemBase {
 
@@ -33,8 +34,8 @@ public class ArmLift extends SubsystemBase {
     leftMotor = new CANSparkMax(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_LEFT, MotorType.kBrushed);
     rightMotor = new CANSparkMax(ARM_LIFT_CONSTANTS.MOTOR_CONTROLLER_ID_RIGHT, MotorType.kBrushed);
 
-//    leftMotor.restoreFactoryDefaults();
-//    rightMotor.restoreFactoryDefaults();
+    leftMotor.restoreFactoryDefaults();
+    rightMotor.restoreFactoryDefaults();
     leftMotor.setIdleMode(IdleMode.kBrake);
     rightMotor.setIdleMode(IdleMode.kBrake);
     
@@ -54,16 +55,16 @@ public class ArmLift extends SubsystemBase {
   }
 
   public void up() {
-    leftMotor.set(leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-    rightMotor.set(rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+    leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+    rightMotor.set(rightDirection * ARM_LIFT_CONSTANTS.SPEED);
   }
   public void off() {
     leftMotor.set(0);
     rightMotor.set(0);
   }
   public void down() {
-      leftMotor.set(-leftDirection*ARM_LIFT_CONSTANTS.SPEED);
-      rightMotor.set(-rightDirection*ARM_LIFT_CONSTANTS.SPEED);
+      leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
+      rightMotor.set(-rightDirection * ARM_LIFT_CONSTANTS.SPEED);
   }
 
   // public void moveArm(SIDE side, STATE state) {

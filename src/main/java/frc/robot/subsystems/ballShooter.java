@@ -18,7 +18,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.BALL_SHOOTER_CONSTANTS;
+
 
 public class BallShooter extends SubsystemBase {
   /**
@@ -80,7 +82,6 @@ public class BallShooter extends SubsystemBase {
     if(BALL_SHOOTER_CONSTANTS.ENABLE_TUNING){
       enableTuning();
     }
-  
 
     //Shooter PIDs
     topPID = topMotor.getPIDController();
@@ -93,8 +94,8 @@ public class BallShooter extends SubsystemBase {
   public void on(double topRPM, double bottomRPM) {
     // topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
     // bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
-    topMotor.set(-1);
-    bottomMotor.set(1);
+    topMotor.set(-BALL_SHOOTER_CONSTANTS.SPEED);
+    bottomMotor.set(BALL_SHOOTER_CONSTANTS.SPEED);
   }
 
 

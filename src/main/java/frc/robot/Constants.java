@@ -50,7 +50,7 @@ public final class Constants {
         public static final boolean IS_NEGATED = true;
     }
     public class NOT_SHOOTER_INTAKE_CONSTANTS{
-        public static final int MOTOR_CONTROLLER_ID = 31;
+        public static final int MOTOR_CONTROLLER_ID = 32;
         public static final double SPEED = .3;
         public static final boolean IS_NEGATED = true;
     }
@@ -60,12 +60,13 @@ public final class Constants {
         public static final int LIMIT_SWITCH_ID_LEFT = 0;
         public static final int LIMIT_SWITCH_ID_RIGHT = 1;
         public static final double SPEED = .5;
-        public static final boolean IS_NEGATED_LEFT = true;
-        public static final boolean IS_NEGATED_RIGHT = true;
+        public static final boolean IS_NEGATED_LEFT = false;
+        public static final boolean IS_NEGATED_RIGHT = false;
     }
     public class BALL_SHOOTER_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_TOP = 25;
         public static final int MOTOR_CONTROLLER_ID_BOTTOM = 27;
+        public static final double SPEED = 1;
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
         public static final boolean ENABLE_TUNING = true;
