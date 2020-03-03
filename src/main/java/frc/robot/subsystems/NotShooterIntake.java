@@ -7,14 +7,7 @@
 
 package frc.robot.subsystems;
 
-import java.net.CacheRequest;
-
-import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANError;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -24,7 +17,6 @@ import frc.robot.Constants.NOT_SHOOTER_INTAKE_CONSTANTS;
 
 
 public class NotShooterIntake extends SubsystemBase {
-  private CANEncoder encoder;
   private CANSparkMax motor;
   private int direction = 1;
   
@@ -32,30 +24,26 @@ public class NotShooterIntake extends SubsystemBase {
     motor = new CANSparkMax(Constants.NOT_SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID, MotorType.kBrushless);
 
     motor.restoreFactoryDefaults();
-
-    //Set Idle Mode
     motor.setIdleMode(IdleMode.kBrake);
 
     if (NOT_SHOOTER_INTAKE_CONSTANTS.IS_NEGATED) {
       direction = -1;
     }
+  }
 
-    //Shooter Encoders
-    encoder = motor.getEncoder();
+  public void suck() {
+    motor.set(direction * NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
+  }
 
+  public void spit() {
+    motor.set(-direction * NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
+  }
+
+  public void off() {
+    motor.set(0);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  }
-  public void on() {
-    motor.set(direction * NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
-  }
-  public void off() {
-    motor.set(0);
-  }
-  public void reverseOn() {
-    motor.set(-1 * direction * NOT_SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
 }

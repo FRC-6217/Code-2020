@@ -76,11 +76,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  //  new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, limeLight, driveStick, distance));
+  //  new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, angle, distance));
  
     //Xbox Joystick
   
-    new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, true));
+    new JoystickTrigger(xbox, 3).whileHeld(new ShooterIntakeCommand(shooterIntake, STATE.FORWARDS));
     new JoystickButton(xbox, Button.kBumperLeft.value).whileHeld(new ArmLiftCommand(armLift, STATE.UP));
     new JoystickTrigger(xbox, 2).whileHeld(new ArmLiftCommand(armLift, STATE.DOWN));
     new JoystickButton(xbox, Button.kBumperRight.value).toggleWhenPressed(new BallShooterCommand(ballShooter, true));

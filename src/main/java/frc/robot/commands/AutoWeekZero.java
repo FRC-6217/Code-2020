@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.STATE;
 import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.ShooterIntake;
 
@@ -21,6 +22,6 @@ public class AutoWeekZero extends SequentialCommandGroup {
   public AutoWeekZero(BallShooter bs, ShooterIntake si) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new  BallShooterCommandAuto(bs, true), new Wait(1), new ShooterIntakeCommand(si, true), new Wait(1), new ShooterIntakeCommand(si, false), new BallShooterCommandAuto(bs, false));
+    super(new  BallShooterCommandAuto(bs, true), new Wait(1), new ShooterIntakeCommand(si, STATE.FORWARDS), new Wait(1), new ShooterIntakeCommand(si, STATE.OFF), new BallShooterCommandAuto(bs, false));
   }
 }

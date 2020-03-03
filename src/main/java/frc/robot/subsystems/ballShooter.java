@@ -21,8 +21,8 @@ public class BallShooter extends SubsystemBase {
 
   private CANSparkMax topMotor;
   private CANSparkMax bottomMotor;
-  private double topDirection = 1;
-  private double bottomDirection = 1;
+  private int topDirection = 1;
+  private int bottomDirection = 1;
   private CANEncoder topEncoder;
   private CANEncoder bottomEncoder;
 
@@ -157,6 +157,8 @@ public class BallShooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Current Top", topMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Current Bottom", bottomMotor.getOutputCurrent());
     //Print Current Velocity of Both Motors
     SmartDashboard.putNumber("Top RPM", topEncoder.getVelocity());
     SmartDashboard.putNumber("Bottom RPM", bottomEncoder.getVelocity());

@@ -52,11 +52,11 @@ public class JoyDriveCommand extends CommandBase {
     governer = joy.getRawAxis(3);
 
     if(gyroButtonForward){
-        driveTrain.ResetGyro();
+        driveTrain.resetGyro();
         isReversed = false;
     }
     else if(gyroButtonBackward){
-        driveTrain.ResetGyro();
+        driveTrain.resetGyro();
         isReversed = true;
     }
     

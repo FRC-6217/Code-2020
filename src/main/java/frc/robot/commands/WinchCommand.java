@@ -12,16 +12,13 @@ import frc.robot.Constants.STATE;
 import frc.robot.subsystems.Winch;
 
 public class WinchCommand extends CommandBase {
-  STATE state;
-  Winch winch;
-  /**
-   * Creates a new WinchCommand.
-   */
+  private STATE state;
+  private Winch winch;
+
   public WinchCommand(Winch winch, STATE state) {
     addRequirements(winch);
     this.winch = winch;
     this.state = state;
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -34,12 +31,18 @@ public class WinchCommand extends CommandBase {
   public void execute() {
     switch (state) {
       case UP:
-        winch.on();
+        winch.up();
         break;
       case DOWN:
-        winch.reverse();
+        winch.down();
         break;
       case OFF:
+        winch.off();
+        break;
+      case FORWARDS:
+        winch.off();
+        break;
+      case REVERSE:
         winch.off();
         break;
     }

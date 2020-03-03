@@ -8,24 +8,24 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.COLOR_WHEEL_CONSTANTS;
 
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 
 public class ColorWheel extends SubsystemBase {
-  /**
-   * Creates a new ColorWheel.
-   */
+
   private CANSparkMax motor;
+  private int direction = 1;
+
   private ColorSensorV3 colorSensor;
   private ColorMatch colorMatch;
 
@@ -36,7 +36,13 @@ public class ColorWheel extends SubsystemBase {
   
   public ColorWheel() {
     motor = new CANSparkMax(Constants.COLOR_WHEEL_CONSTANTS.MOTOR_CONTROLLER_ID, MotorType.kBrushless);
-    setMotor();
+    
+    motor.restoreFactoryDefaults();
+    motor.setIdleMode(IdleMode.kBrake);
+
+    if (COLOR_WHEEL_CONSTANTS.IS_NEGATED) {
+      direction = -1;
+    }
 
     colorSensor = new ColorSensorV3(Constants.COLOR_WHEEL_CONSTANTS.PORT);
     colorMatch = new ColorMatch();
@@ -50,26 +56,18 @@ public class ColorWheel extends SubsystemBase {
     colorMatch.addColorMatch(red);
     colorMatch.addColorMatch(yellow);
     colorMatch.addColorMatch(green);
-
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
   public void forwards() {
-   motor.set(Constants.COLOR_WHEEL_CONSTANTS.SPEED);
+   motor.set(direction * Constants.COLOR_WHEEL_CONSTANTS.SPEED);
   }
+
+  public void backwards() {
+    motor.set(-direction * Constants.COLOR_WHEEL_CONSTANTS.SPEED);
+  }
+
   public void off() {
    motor.set(0);
-  }
-  public void backwards() {
-    motor.set(-Constants.COLOR_WHEEL_CONSTANTS.SPEED);
-  }
-
-  private void setMotor(){
-    motor.restoreFactoryDefaults();
-    motor.setIdleMode(IdleMode.kBrake);
   }
 
   public Color getColor(){
@@ -80,7 +78,7 @@ public class ColorWheel extends SubsystemBase {
     return colorMatch.matchClosestColor(getColor()).color;
   }
 
-  public double getPercent(){
+  public double getConfidence(){
     return colorMatch.matchClosestColor(getColor()).confidence;
   }
 
@@ -99,5 +97,28 @@ public class ColorWheel extends SubsystemBase {
   }
   public Color getRed(){
     return red;
+  }
+
+  @Override
+  public void periodic() {
+    String colorString;
+
+    if (getClosestColor() == blue) {
+      colorString = "Blue";
+    } else if (getClosestColor() == red) {
+      colorString = "Red";
+    } else if (getClosestColor() == green) {
+      colorString = "Green";
+    } else if (getClosestColor() == yellow) {
+      colorString = "Yellow";
+    } else {
+      colorString = "Unknown";
+    }
+
+    SmartDashboard.putNumber("Red", getColor().red);
+    SmartDashboard.putNumber("Green", getColor().green);
+    SmartDashboard.putNumber("Blue", getColor().blue);
+    SmartDashboard.putNumber("Confidence", getConfidence());
+    SmartDashboard.putString("Detected Color", colorString);
   }
 }

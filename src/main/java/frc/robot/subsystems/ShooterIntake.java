@@ -16,28 +16,27 @@ import frc.robot.Constants.SHOOTER_INTAKE_CONSTANTS;
 public class ShooterIntake extends SubsystemBase {
   VictorSPX shooterIntakeMotor;
   int direction = 1;
-  /**
-   * Creates a new ShooterIntake.
-   */
+  
   public ShooterIntake() {
     shooterIntakeMotor = new VictorSPX(SHOOTER_INTAKE_CONSTANTS.MOTOR_CONTROLLER_ID);
     if (SHOOTER_INTAKE_CONSTANTS.IS_NEGATED) {
       direction = -1;
     }
-
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
-  public void on() {
+  public void forward() {
     shooterIntakeMotor.set(ControlMode.PercentOutput, direction*SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
+
   public void reverse() {
     shooterIntakeMotor.set(ControlMode.PercentOutput, -direction*SHOOTER_INTAKE_CONSTANTS.SPEED);
   }
+
   public void off() {
     shooterIntakeMotor.set(ControlMode.PercentOutput, 0);
+  }
+  
+  @Override
+  public void periodic() {
   }
 }

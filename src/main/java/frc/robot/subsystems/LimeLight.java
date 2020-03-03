@@ -17,9 +17,7 @@ import frc.robot.libraries.Distance;
 import frc.robot.Constants.LIME_LIGHT_CONSTANTS;
 
 public class LimeLight extends SubsystemBase {
-  /**
-   * Creates a new LimeLight.
-   */
+
   private Angle angle;
   private Distance distance;
 
@@ -47,6 +45,7 @@ public class LimeLight extends SubsystemBase {
     /*0 	use the LED Mode set in the current pipeline
     1 	force off*/
   }
+
   public void limeNotRequired() {
     numClients--;
     if (numClients == 0) {
@@ -58,7 +57,6 @@ public class LimeLight extends SubsystemBase {
 
   @Override
   public void periodic() {
-
     SmartDashboard.putNumber("pipeline", table.getEntry("pipeline").getDouble(1000000));
 
     if(tv.getDouble(0) == 1){
@@ -75,6 +73,5 @@ public class LimeLight extends SubsystemBase {
 
       distance.setDistance(Double.POSITIVE_INFINITY);
     }
-    // This method will be called once per scheduler run
   }
 }

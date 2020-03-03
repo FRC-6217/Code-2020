@@ -57,8 +57,6 @@ public final class Constants {
     public class ARM_LIFT_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_LEFT = 28;
         public static final int MOTOR_CONTROLLER_ID_RIGHT = 30;
-        public static final int LIMIT_SWITCH_ID_LEFT = 0;
-        public static final int LIMIT_SWITCH_ID_RIGHT = 1;
         public static final double SPEED = .5;
         public static final boolean IS_NEGATED_LEFT = false;
         public static final boolean IS_NEGATED_RIGHT = false;
@@ -70,11 +68,11 @@ public final class Constants {
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
         public static final boolean ENABLE_TUNING = true;
-        public static final double KP = 0.01;
+        public static final double KP = 0.0001;
         public static final double KI = 0;
-        public static final double KD = 0;
+        public static final double KD = 0.001;
         public static final double KIZ = 0;
-        public static final double KFF = 0;
+        public static final double KFF = 0.000182;
         public static final double KMINOUTPUT = -1;
         public static final double KMAXOUTPUT = 1;
       
@@ -90,7 +88,7 @@ public final class Constants {
     public class WINCH_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 26;
         public static final double SPEED = 1;
-        public static final boolean IS_NEGATED = false;
+        public static final boolean IS_NEGATED = true;
     }
 
     public static class COLOR_WHEEL_CONSTANTS{

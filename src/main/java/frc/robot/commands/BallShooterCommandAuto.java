@@ -33,7 +33,7 @@ public class BallShooterCommandAuto extends CommandBase {
   public void execute() {
     //TODO make distance based
     if(ifOn){
-      shooter.on(2000, 2000);
+      shooter.on();
     }
     else{
       shooter.off();

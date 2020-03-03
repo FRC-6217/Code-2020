@@ -12,22 +12,18 @@ import frc.robot.Constants.STATE;
 import frc.robot.subsystems.NotShooterIntake;
 
 public class NotShooterIntakeCommand extends CommandBase {
-  NotShooterIntake notShooterIntake;
-  STATE state;
-  /**
-   * Creates a new NotShooterIntakeCommand.
-   */
+  private NotShooterIntake notIntake;
+  private STATE state;
+
   public NotShooterIntakeCommand(NotShooterIntake notIntake, STATE state) {
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(notIntake);
-    notShooterIntake = notIntake;
+    this.notIntake = notIntake;
     this.state = state;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,13 +31,19 @@ public class NotShooterIntakeCommand extends CommandBase {
   public void execute() {
     switch (state) {
       case FORWARDS:
-        notShooterIntake.on();
+        notIntake.suck();;
         break;
       case REVERSE:
-        notShooterIntake.reverseOn();
+        notIntake.spit();
         break;
       case OFF:
-        notShooterIntake.off();
+        notIntake.off();
+        break;
+      case UP:
+        notIntake.off();
+        break;
+      case DOWN:
+        notIntake.off();
         break;
     }
   }
@@ -49,7 +51,7 @@ public class NotShooterIntakeCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    notShooterIntake.off();
+    notIntake.off();
   }
 
   // Returns true when the command should end.
