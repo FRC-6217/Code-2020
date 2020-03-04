@@ -33,11 +33,11 @@ public class FakeJoystick extends Joystick{
     }
 
     public void setX(double x){
-        axis[1] = x; 
+        axis[0] = x; 
     }
 
     public void setY(double y){
-        axis[0] = y; 
+        axis[1] = y; 
     }
 
     public void setZ(double z){
@@ -50,14 +50,14 @@ public class FakeJoystick extends Joystick{
 
     public void setBackwards(double percent){
         setX(0);
-        setY(-1);
+        setY(1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }
     
     public void setForwards(double percent){
         setX(0);
-        setY(1);
+        setY(-1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }

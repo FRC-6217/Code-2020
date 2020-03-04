@@ -25,6 +25,7 @@ public class JoyDriveCommand extends CommandBase {
   private boolean isReversed;
   private double x1;
   private double y1;
+  private int direction = 1;
   
   /**
    * Creates a new JoyDrive.
@@ -47,18 +48,18 @@ public class JoyDriveCommand extends CommandBase {
     y = joy.getRawAxis(0);
     x = joy.getRawAxis(1);
     z = joy.getRawAxis(2);
-    gyroButtonForward = joy.getRawButton(5);
-    gyroButtonBackward = joy.getRawButton(6);        
+    // gyroButtonForward = joy.getRawButton(5);
+    // gyroButtonBackward = joy.getRawButton(6);        
     governer = joy.getRawAxis(3);
 
-    if(gyroButtonForward){
-        driveTrain.resetGyro();
-        isReversed = false;
-    }
-    else if(gyroButtonBackward){
-        driveTrain.resetGyro();
-        isReversed = true;
-    }
+    // if(gyroButtonForward){
+    //     driveTrain.resetGyro();
+    //     isReversed = false;
+    // }
+    // else if(gyroButtonBackward){
+    //     driveTrain.resetGyro();
+    //     isReversed = true;
+    // }
     
     x = (Math.abs(x) > .3 ? x : 0.0);
     y = (Math.abs(y) > .3 ? y : 0.0);
@@ -67,7 +68,14 @@ public class JoyDriveCommand extends CommandBase {
     x1 = driveTrain.TransformX(x, y, isReversed);
     y1 = driveTrain.TransformY(x, y, isReversed);
 
-    driveTrain.Drive (-y, x, -z, Math.abs(governer-1));
+    if(isReversed){
+      driveTrain.Drive (y, -x, -z, Math.abs(governer-1));
+    }
+    else{
+      driveTrain.Drive (-y, x, -z, Math.abs(governer-1));
+    }
+
+    
     gyroButtonForward = false;
     gyroButtonBackward = false;
   }

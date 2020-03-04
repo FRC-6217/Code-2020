@@ -14,15 +14,16 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.STATE;
 import frc.robot.commands.Align;
 import frc.robot.commands.ArmLiftCommand;
-import frc.robot.commands.AutoWeekZero;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.ColorWheelCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.NotShooterIntakeCommand;
 import frc.robot.commands.ShooterIntakeCommand;
 import frc.robot.commands.WinchCommand;
+import frc.robot.commands.autoCommand.Test;
 import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
+import frc.robot.libraries.FakeJoystick;
 import frc.robot.libraries.JoystickTrigger;
 import frc.robot.subsystems.ArmLift;
 import frc.robot.subsystems.ArmLiftSeperate;
@@ -45,6 +46,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   //Joysticks
+  private final FakeJoystick fake = new FakeJoystick();
+
   private final Joystick driveStick = new Joystick(Constants.DRIVESTICK_PORT);
   private final XboxController xbox = new XboxController(Constants.XBOX_PORT);
 
@@ -76,7 +79,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  //  new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, angle, distance));
+   new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, angle));
  
     //Xbox Joystick
   
@@ -112,8 +115,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    fake.setLeftShift(.9);
+    return new Test(driveTrain, fake);
     // An ExampleCommand will run in autonomous
   //  return new AutoWeekZero(ballShooter, shooterIntake);
-  return null;
+  // return null;
   }
 }

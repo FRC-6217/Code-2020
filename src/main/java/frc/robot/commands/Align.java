@@ -19,9 +19,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
 
 public class Align extends CommandBase {
-  /**
-   * Creates a new AlignZ.
-   */
+
   private final DriveTrain driveTrain;
   private LimeLight light;
   private Joystick joy;
@@ -83,7 +81,7 @@ public class Align extends CommandBase {
     distanceUse = false;
 
     pidZ = new PIDController(kPZ, kIZ, kDZ);
-    pidZ.setTolerance(0.1, 0.1);
+    pidZ.setTolerance(10, 10);
   }
 
   public Align(DriveTrain train, LimeLight light, Joystick joy, Distance distance) {
@@ -99,7 +97,6 @@ public class Align extends CommandBase {
     angleUse = false;
     distanceUse = true;
 
-    // updatePIDY();
     atSetY = false;
     pidY = new PIDController(kPY, kIY, kDY);
     pidY.setTolerance(50, 1000);
@@ -108,7 +105,7 @@ public class Align extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("KpAlignZ", 0);
+    SmartDashboard.putNumber("KpAlignZ", 0.1);
     SmartDashboard.putNumber("KiAlignZ", 0);
 	  SmartDashboard.putNumber("KdAlignZ", 0);
 	
@@ -116,17 +113,17 @@ public class Align extends CommandBase {
     SmartDashboard.putNumber("KiAlignY", 0);
     SmartDashboard.putNumber("KdAlignY", 0);
   
-    
-    atSetY = false;
-    
-    double localDistance = distance.getDistance();
-    
-    errorY = pidY.calculate(localDistance, 7);
-    SmartDashboard.putNumber("ErrorY", errorY);
-    outputY = MathUtil.clamp(errorY, -1, 1);
 
-    if(pidY.atSetpoint()){
-      atSetY = true;
+    atSetZ = false;
+    
+    double localAngle = angle.getAngle();
+    
+    errorZ = pidZ.calculate(localAngle, 0);
+    SmartDashboard.putNumber("ErrorZ", errorZ);
+    outputZ = MathUtil.clamp(errorZ, -1, 1);
+
+    if(pidZ.atSetpoint()){
+      atSetZ = true;
     }
 
   }
@@ -273,7 +270,7 @@ public class Align extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     driveTrain.Drive(0, 0, 0, 0);
-    light.limeNotRequired();
+    // light.limeNotRequired();
   }
 
   // Returns true when the command should end.
