@@ -5,10 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.autoCommand;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.STATE;
+import frc.robot.commands.BallShooterCommandAuto;
+import frc.robot.commands.ShooterIntakeCommand;
+import frc.robot.commands.Wait;
 import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.ShooterIntake;
 
