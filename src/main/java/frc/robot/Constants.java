@@ -122,8 +122,7 @@ public final class Constants {
         DOWN,
         FORWARDS,
         REVERSE,
-        OFF
-      
+        OFF  
       };
 }
 
