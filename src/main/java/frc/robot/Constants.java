@@ -37,6 +37,10 @@ public final class Constants {
         public static final int FL_ANGLE_MOTOR = 41;
     }
     public class WHEEL_DRIVE_CONSTANTS{
+        public static final double kP = 1;
+        public static final double kI = 0.5;
+        public static final double kZ = 0;
+        public static final double SCALE_FACTOR = 9.5/5;//(3.94*Math.PI)/42;
         public static final double MIN_ANGLE_REQUEST = -1;
         public static final double MAX_ANGLE_REQUEST = 1;
         public static final double MIN_VOLTAGE = 0.015625;
@@ -64,7 +68,7 @@ public final class Constants {
     public class BALL_SHOOTER_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID_TOP = 25;
         public static final int MOTOR_CONTROLLER_ID_BOTTOM = 27;
-        public static final double SPEED = 1;
+        public static final double SPEED = .6;
         public static final boolean IS_NEGATED_TOP = true;
         public static final boolean IS_NEGATED_BOTTOM = false;
         public static final boolean ENABLE_TUNING = true;
@@ -78,12 +82,27 @@ public final class Constants {
       
     }
     public class ALIGN_COMMAND_CONSTANTS{
-        public static final double kPZ = 0;
+        public static final double kPZ = 0.1;
         public static final double kIZ = 0;
         public static final double kDZ = 0;
-        public static final double kPY = 0;
+        public static final double kMinZ = 0.05;
+        public static final double kMaxZ = 0.5;
+
+        public static final double kPY = 0.1;
         public static final double kIY = 0;
         public static final double kDY = 0;
+        public static final double kMinY = 0.05;
+        public static final double kMaxY = 0.5;
+
+        public static final double kPX = 0.1;
+        public static final double kIX = 0;
+        public static final double kDX = 0;
+        public static final double kMinX = 0.05;
+        public static final double kMaxX = 0.5;
+
+        public static final double Z_HUMAN_IMPORTANCE = 0.4;
+        public static final double Y_HUMAN_IMPORTANCE = 0.4;
+        public static final double X_HUMAN_IMPORTANCE = 0.4;
     }
     public class WINCH_CONSTANTS{
         public static final int MOTOR_CONTROLLER_ID = 26;
@@ -105,6 +124,10 @@ public final class Constants {
         public static final double[] RGB_FRC_YELLOW = { 0.361, 0.524, 0.113 };
     }
 
+    public class GYRO_CONSTANTS{
+        public static final boolean CALIBRATE_GYRO = false;
+    }
+
     public class LIME_LIGHT_CONSTANTS{
         public static final double GOAL_HEIGHT = 83.5;
         public static final double LIME_HEIGHT = 18.5;
@@ -122,8 +145,8 @@ public final class Constants {
         DOWN,
         FORWARDS,
         REVERSE,
+        ON,
         OFF
-      
       };
 }
 

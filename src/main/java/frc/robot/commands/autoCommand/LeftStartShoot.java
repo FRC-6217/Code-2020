@@ -8,21 +8,26 @@
 package frc.robot.commands.autoCommand;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.STATE;
+import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
+import frc.robot.commands.ShooterIntakeCommand;
+import frc.robot.commands.Wait;
 import frc.robot.libraries.FakeJoystick;
+import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ShooterIntake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class Test extends SequentialCommandGroup {
+public class LeftStartShoot extends SequentialCommandGroup {
   /**
-   * Creates a new Test.
+   * Creates a new LeftStartShoot.
    */
-  
-  public Test(DriveTrain train, FakeJoystick joy1) {
+  public LeftStartShoot(BallShooter bs, ShooterIntake si, DriveTrain dt, FakeJoystick joy) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new JoyDriveCommand(train, joy1, 10));
+    super(new BallShooterCommand(bs), new Wait(2), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new BallShooterCommand(bs), new JoyDriveCommand(dt, joy, 20));
   }
 }

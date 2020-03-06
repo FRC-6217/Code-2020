@@ -10,11 +10,11 @@ package frc.robot.libraries;
 /**
  * Add your docs here.
  */
-public class Distance {
+public class DistanceX {
 
     private double distance;
 
-    public Distance(){
+    public DistanceX(){
     }
 
     public void setDistance(double distance){

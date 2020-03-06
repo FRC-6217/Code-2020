@@ -27,9 +27,6 @@ public class DriveTrain extends SubsystemBase {
 	private WheelDrive frontRight;
 	private WheelDrive frontLeft;
 
-	//Gyro object
-	private Gyro gyro;
-
 	//Transform variables
 	private double x1;
 	private double y1;
@@ -41,32 +38,58 @@ public class DriveTrain extends SubsystemBase {
 		backLeft = new WheelDrive(DRIVE_TRAIN_CONSTANTS.BL_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.BL_ANGLE_MOTOR);
 		frontRight = new WheelDrive(DRIVE_TRAIN_CONSTANTS.FR_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.FR_ANGLE_MOTOR);
 		frontLeft = new WheelDrive(DRIVE_TRAIN_CONSTANTS.FL_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.FL_ANGLE_MOTOR);
-		
-		gyro = new ADXRS450_Gyro();
-		resetGyro();
  	}
 
-	public double TransformX(double x, double y, boolean isReversed){
-		if(isReversed){
-			x1 = (x * Math.cos((GetAngle() + 180) * (Math.PI / 180))) - (y * Math.sin((GetAngle() + 180) * (Math.PI / 180)));	
+	// public double TransformX(double x, double y, boolean isReversed){
+	// 	if(isReversed){
+	// 		x1 = (x * Math.cos((GetAngle() + 180) * (Math.PI / 180))) - (y * Math.sin((GetAngle() + 180) * (Math.PI / 180)));	
+	// 	}
+	// 	else{
+	// 		x1 = (x * Math.cos(GetAngle() * (Math.PI / 180))) - (y * Math.sin(GetAngle() * (Math.PI / 180)));
+	// 	}
+	// 	return x1;
+	// }
+
+	// public double TransformY(double x, double y, boolean isReversed){
+	// 	if(isReversed){
+	// 		y1 = (x * Math.sin((GetAngle() + 180) * (Math.PI / 180))) + (y * Math.cos((GetAngle() + 180) * (Math.PI / 180)));
+	// 	}
+	// 	else{
+	// 		y1 = (x * Math.sin(GetAngle() * (Math.PI / 180))) + (y * Math.cos(GetAngle() * (Math.PI / 180)));
+	// 	}
+	// 	return y1;
+	// }
+
+	public double getGreatestVel(){
+		double greatest = backRight.getDriveVelocity();
+		if(greatest < backLeft.getDriveVelocity()){
+			greatest = backLeft.getDriveVelocity();
 		}
-		else{
-			x1 = (x * Math.cos(GetAngle() * (Math.PI / 180))) - (y * Math.sin(GetAngle() * (Math.PI / 180)));
+		if(greatest < frontRight.getDriveVelocity()){
+			greatest = frontRight.getDriveVelocity();
 		}
-		return x1;
+		if(greatest < frontLeft.getDriveVelocity()){
+			greatest = frontLeft.getDriveVelocity();
+		}
+		return greatest;
 	}
 
-	public double TransformY(double x, double y, boolean isReversed){
-		if(isReversed){
-			y1 = (x * Math.sin((GetAngle() + 180) * (Math.PI / 180))) + (y * Math.cos((GetAngle() + 180) * (Math.PI / 180)));
-		}
-		else{
-			y1 = (x * Math.sin(GetAngle() * (Math.PI / 180))) + (y * Math.cos(GetAngle() * (Math.PI / 180)));
-		}
-		return y1;
+	public double getAveragePos(){
+		return ((Math.abs(backRight.getDrivePosition())
+		+ Math.abs(backLeft.getDrivePosition())
+		+ Math.abs(frontRight.getDrivePosition())
+		+ Math.abs(frontLeft.getDrivePosition()))
+		/4);
 	}
 
-	public void Drive(double x, double y, double z, double governer) {
+	public void resetDrivePos(){
+		backRight.resetDrivePosition();
+		backLeft.resetDrivePosition();
+		frontRight.resetDrivePosition();
+		frontLeft.resetDrivePosition();
+	}
+
+	public void drive(double x, double y, double z, double governer) {
 		x *= governer;
 		y *= governer;
 		z *= governer;
@@ -122,24 +145,13 @@ public class DriveTrain extends SubsystemBase {
 		backRight.drive(backRightSpeed , backRightAngle);
 		backLeft.drive(backLeftSpeed , backLeftAngle);
 		frontRight.drive(frontRightSpeed , frontRightAngle);
-		frontLeft.drive(-frontLeftSpeed , frontLeftAngle);
-	}
-	
-	public void resetGyro(){ //had to change from ResetGryo to ResetGyro so if that wasn´t something I was supposed to change feel free to change it back
-		gyro.reset();
-	}
-
-	public void calibrateGyro(){
-		gyro.calibrate();
-	}
-
-	public double GetAngle(){
-		SmartDashboard.putNumber("Gyro", -gyro.getAngle());
-		return -gyro.getAngle();
+		frontLeft.drive(frontLeftSpeed , frontLeftAngle);
 	}
 
 	@Override
   	public void periodic() {
+		SmartDashboard.putNumber("Avg Position", getAveragePos());
+
 		if(CommandScheduler.getInstance().requiring(this) != null)
 		SmartDashboard.putString("DriveCommand", CommandScheduler.getInstance().requiring(this).toString());
   	}

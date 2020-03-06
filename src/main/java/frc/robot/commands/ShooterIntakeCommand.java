@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.STATE;
 import frc.robot.subsystems.ShooterIntake;
@@ -14,6 +15,8 @@ import frc.robot.subsystems.ShooterIntake;
 public class ShooterIntakeCommand extends CommandBase {
   ShooterIntake intake;
   STATE state;
+  Timer timer; 
+  double timeOut;
   
   public ShooterIntakeCommand(ShooterIntake intake, STATE state) {
     addRequirements(intake);
@@ -21,9 +24,22 @@ public class ShooterIntakeCommand extends CommandBase {
     this.state = state;
   }
 
+  public ShooterIntakeCommand(ShooterIntake intake, STATE state, double timeOut) {
+    addRequirements(intake);
+    this.intake = intake;
+    this.state = state;
+
+    this.timer = new Timer();
+    this.timeOut = timeOut;
+    
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(timer != null){
+      timer.start();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,6 +73,11 @@ public class ShooterIntakeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(timer != null){
+      return (timer.get() >= timeOut);
+    }
+    else{
+      return false;
+    }
   }
 }

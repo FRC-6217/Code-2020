@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BALL_SHOOTER_CONSTANTS;
+import frc.robot.Constants.STATE;
 
 public class BallShooter extends SubsystemBase {
 
@@ -25,6 +26,7 @@ public class BallShooter extends SubsystemBase {
   private int bottomDirection = 1;
   private CANEncoder topEncoder;
   private CANEncoder bottomEncoder;
+  private STATE state = STATE.OFF;
 
   private CANPIDController topPID;
   private CANPIDController bottomPID;
@@ -37,6 +39,8 @@ public class BallShooter extends SubsystemBase {
   private double kFF;
   private double kMinOutput;
   private double kMaxOutput;
+  private double topSet;
+  private double bottomSet;
 
   public BallShooter() {
     topMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_TOP, MotorType.kBrushless);
@@ -45,8 +49,8 @@ public class BallShooter extends SubsystemBase {
     topMotor.restoreFactoryDefaults();
     bottomMotor.restoreFactoryDefaults();
 
-    topMotor.setIdleMode(IdleMode.kCoast);
-    bottomMotor.setIdleMode(IdleMode.kCoast);
+    topMotor.setIdleMode(IdleMode.kBrake);
+    bottomMotor.setIdleMode(IdleMode.kBrake);
 
     if (BALL_SHOOTER_CONSTANTS.IS_NEGATED_TOP) {
       topDirection = -1;
@@ -77,12 +81,25 @@ public class BallShooter extends SubsystemBase {
     bottomPID = bottomMotor.getPIDController();
     setPID(topPID);
     setPID(bottomPID);
+
+    SmartDashboard.putBoolean("BALL SHOOTER", false);
+  }
+
+  public void toggle(){
+    if(state == STATE.OFF){
+      onPID(topSet, bottomSet);
+    }
+    else if(state == STATE.ON){
+      off();
+    }
   }
 
   //Activate Shooter
   public void on(){
     topMotor.set(topDirection * BALL_SHOOTER_CONSTANTS.SPEED);
     bottomMotor.set(bottomDirection * BALL_SHOOTER_CONSTANTS.SPEED);
+    state = STATE.ON;
+    SmartDashboard.putBoolean("BALL SHOOTER", true);
   }
 
   //Activate Shooter with PID
@@ -90,12 +107,16 @@ public class BallShooter extends SubsystemBase {
   public void onPID(double topRPM, double bottomRPM) {
     topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
     bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
+    state = STATE.ON;
+    SmartDashboard.putBoolean("BALL SHOOTER", true);
   }
 
   //Deactivate Shooter
   public void off() {
     topMotor.set(0);
     bottomMotor.set(0);
+    state = STATE.OFF;
+    SmartDashboard.putBoolean("BALL SHOOTER", false);
   }
 
   public void enableTuning(){
@@ -106,6 +127,9 @@ public class BallShooter extends SubsystemBase {
     SmartDashboard.putNumber("FfShooter", kFF);
     SmartDashboard.putNumber("MaxInShooter", kMaxOutput);
     SmartDashboard.putNumber("MinInShooter", kMinOutput);
+
+    SmartDashboard.putNumber("Top Shoot Set", 3500);
+    SmartDashboard.putNumber("Bottom Shoot Set", 3500);
   }
 
   public void updatePID(){
@@ -138,6 +162,12 @@ public class BallShooter extends SubsystemBase {
     if(SmartDashboard.getNumber("MinInShooter", 0) != kMinOutput){
       kMinOutput = SmartDashboard.getNumber("MinInShooter", 0);
       isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("Top Shoot Set", 0) != topSet){
+      topSet = SmartDashboard.getNumber("Top Shoot Set", 0);
+    }
+    if(SmartDashboard.getNumber("Bottom Shoot Set", 0) != bottomSet){
+      bottomSet = SmartDashboard.getNumber("Bottom Shoot Set", 0);
     }
 
     if(isUpdated){

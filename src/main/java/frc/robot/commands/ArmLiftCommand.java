@@ -34,7 +34,7 @@ public class ArmLiftCommand extends CommandBase {
         arm.up();
         break;
       case DOWN:
-        arm.down();
+        arm.downLimit();
         break;
       case OFF:
         arm.off();
@@ -58,19 +58,19 @@ public class ArmLiftCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // if(state == STATE.UP && arm.getUpperLimits()){
-    //   return true;
-    // }
-    // else if(state == STATE.DOWN && arm.getLowerLimits()){
-    //   return true;
-    // }
-    // else if(state == STATE.OFF || state == STATE.FORWARDS || state == STATE.REVERSE){
-    //   return true;
-    // }
-    // else{
-    //   return false;
-    // }
+    if(state == STATE.DOWN && arm.getLowerLimits()){
+      return true;
+    }
+    else if(state == STATE.UP){
+      return false;
+    }
+    else if(state == STATE.OFF || state == STATE.FORWARDS || state == STATE.REVERSE){
+      return true;
+    }
+    else{
+      return false;
+    }
 
-    return false;
+    // return false;
   }
 }

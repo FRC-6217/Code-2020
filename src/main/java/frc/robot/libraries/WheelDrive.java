@@ -3,7 +3,9 @@ package frc.robot.libraries;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANAnalog;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -13,10 +15,6 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.WHEEL_DRIVE_CONSTANTS;
 
 public class WheelDrive {
-    //Encoder, motor, and current channel port for wheel module
-    private AnalogInput speedEnc;
-    private CANAnalog angleEnc;
-
     //PID objects for angle and speed PID loops
     private PIDController speedPID;
     private PIDController anglePID;
@@ -24,6 +22,12 @@ public class WheelDrive {
     //Motors
     private CANSparkMax speedMotor;
     private VictorSPX angleMotor;
+    
+    //Encoder
+    private CANEncoder speedEnc;
+    private CANAnalog angleEnc;
+
+    //TODO Current Channel
 
     //Calculation variables to enable wheel reversal if greater than 90deg turn neseccary
     private double angleFeedback;
@@ -37,12 +41,9 @@ public class WheelDrive {
     private boolean isF;
 	
 	public WheelDrive(int speedMotor, int angleMotor) {
-        //Pass in Encoder ports to objects
-        //this.speedEnc = new AnalogInput(speedEncoder);
-
         //Create PID loops
         //speedPID = new PIDController(1, 0.5, 0, 0.02);
-        anglePID = new PIDController(1, 0.5, 0, 0.02);
+        anglePID = new PIDController(WHEEL_DRIVE_CONSTANTS.kP, WHEEL_DRIVE_CONSTANTS.kI, WHEEL_DRIVE_CONSTANTS.kZ);
 
 		//Allow Angle PID to wrap
         anglePID.enableContinuousInput(WHEEL_DRIVE_CONSTANTS.MIN_VOLTAGE, WHEEL_DRIVE_CONSTANTS.MAX_VOLTAGE);
@@ -50,14 +51,36 @@ public class WheelDrive {
         //Motors
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
         this.angleMotor = new VictorSPX(angleMotor);
+
+        this.speedMotor.restoreFactoryDefaults();
+        
+        //Encoders
+        this.speedEnc = this.speedMotor.getEncoder();
+        this.speedEnc.setPositionConversionFactor(WHEEL_DRIVE_CONSTANTS.SCALE_FACTOR);
         this.angleEnc = this.speedMotor.getAnalog(CANAnalog.AnalogMode.kAbsolute);
-	}
+    }
+    
+    public double getDrivePosition(){
+        return speedEnc.getPosition();
+    }
+
+    public void resetDrivePosition(){
+        speedEnc.setPosition(0);
+    }
+
+    public double getDriveVelocity(){
+        return speedEnc.getVelocity();
+    }
 
 	public void drive(double speed, double angle) {
         //Put Enc values on Smart Dashboard
-        SmartDashboard.putNumber("enc Current " + this.angleMotor.getDeviceID(), angleEnc.getVoltage());
-        SmartDashboard.putNumber("enc Request " + this.angleMotor.getDeviceID(), angle);
-        SmartDashboard.putNumber("enc speed " + this.angleMotor.getDeviceID(), speed);
+        SmartDashboard.putNumber("encAngle Position " + this.angleMotor.getDeviceID(), angleEnc.getVoltage());
+        SmartDashboard.putNumber("encAngle Request " + this.angleMotor.getDeviceID(), angle);
+
+        SmartDashboard.putNumber("encSpeed Position " + this.speedMotor.getDeviceId(), getDrivePosition());
+        SmartDashboard.putNumber("encSpeed Velocity " + this.speedMotor.getDeviceId(), getDriveVelocity());
+        SmartDashboard.putNumber("encSpeed Request " + this.speedMotor.getDeviceId(), speed);
+
         
 
         /*

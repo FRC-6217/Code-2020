@@ -18,14 +18,15 @@ public class JoyDriveCommand extends CommandBase {
   private double x;
   private double y;
   private double z;
-  private boolean gyroButtonForward;
-  private boolean gyroButtonBackward;
   private double governer;
   
-  private boolean isReversed;
+  private boolean isReversed = false;
+  private boolean bounce = false;
   private double x1;
   private double y1;
   private int direction = 1;
+  private boolean isAuto;
+  private double distanceInches;
   
   /**
    * Creates a new JoyDrive.
@@ -35,61 +36,75 @@ public class JoyDriveCommand extends CommandBase {
 
     driveTrain = train;
     this.joy = joy;
+    isAuto = false;
+  }
+
+  public JoyDriveCommand(DriveTrain train, Joystick joy, double distanceInches) {
+    addRequirements(train);
+
+    driveTrain = train;
+    this.joy = joy;
+    isAuto = true;
+    this.distanceInches = distanceInches;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    driveTrain.resetDrivePos();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    y = joy.getRawAxis(0);
-    x = joy.getRawAxis(1);
-    z = joy.getRawAxis(2);
-    // gyroButtonForward = joy.getRawButton(5);
-    // gyroButtonBackward = joy.getRawButton(6);        
+    x = -joy.getRawAxis(0);
+    y = joy.getRawAxis(1);
+    z = -joy.getRawAxis(2);      
     governer = joy.getRawAxis(3);
 
-    // if(gyroButtonForward){
-    //     driveTrain.resetGyro();
-    //     isReversed = false;
-    // }
-    // else if(gyroButtonBackward){
-    //     driveTrain.resetGyro();
-    //     isReversed = true;
-    // }
+    if(joy.getRawButton(3) && !bounce){
+        isReversed ^= joy.getRawButton(3);
+        System.out.println(isReversed);
+        bounce = true;
+    }
+    else if(joy.getRawButton(3) && bounce){
+      bounce = true;
+    }
+    else if(!(joy.getRawButton(3)) && bounce){
+      bounce = false;
+    }
     
-    x = (Math.abs(x) > .3 ? x : 0.0);
-    y = (Math.abs(y) > .3 ? y : 0.0);
-    z = (Math.abs(z) > .3 ? z : 0.0);
+    x = (Math.abs(x) > .2 ? x : 0.0);
+    y = (Math.abs(y) > .2 ? y : 0.0);
+    z = (Math.abs(z) > .2 ? z : 0.0);
 
-    x1 = driveTrain.TransformX(x, y, isReversed);
-    y1 = driveTrain.TransformY(x, y, isReversed);
+    // x1 = driveTrain.TransformX(x, y, isReversed);
+    // y1 = driveTrain.TransformY(x, y, isReversed);
 
     if(isReversed){
-      driveTrain.Drive (y, -x, -z, Math.abs(governer-1));
+      driveTrain.drive(-x, -y, z, Math.abs(governer-1));
     }
     else{
-      driveTrain.Drive (-y, x, -z, Math.abs(governer-1));
+      driveTrain.drive(x, y, z, Math.abs(governer-1));
     }
 
-    
-    gyroButtonForward = false;
-    gyroButtonBackward = false;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.Drive(0, 0, 0, 0);
+    driveTrain.drive(0, 0, 0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(isAuto){
+      return (Math.abs(driveTrain.getAveragePos()) >= distanceInches);
+    }
+    else{
+      return false;
+    }
   }
   
   public String toString(){

@@ -21,9 +21,7 @@ public class ArmLift extends SubsystemBase {
 
   private CANSparkMax leftMotor;
   private CANSparkMax rightMotor;
-  private CANDigitalInput leftLimitUp;
   private CANDigitalInput leftLimitDown;
-  private CANDigitalInput rightLimitUp;
   private CANDigitalInput rightLimitDown;
   private int leftDirection = 1;
   private int rightDirection = 1;
@@ -37,11 +35,8 @@ public class ArmLift extends SubsystemBase {
 
     leftMotor.setIdleMode(IdleMode.kBrake);
     rightMotor.setIdleMode(IdleMode.kBrake);
-    
-    leftLimitUp = leftMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
-    leftLimitDown = leftMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
 
-    rightLimitUp = rightMotor.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
+    leftLimitDown = leftMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     rightLimitDown = rightMotor.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyOpen);
     
     if (ARM_LIFT_CONSTANTS.IS_NEGATED_LEFT) {
@@ -60,22 +55,6 @@ public class ArmLift extends SubsystemBase {
   public void down(){
     leftMotor.set(-leftDirection * ARM_LIFT_CONSTANTS.SPEED);
     rightMotor.set(-rightDirection * ARM_LIFT_CONSTANTS.SPEED);
-  }
-
-  public void upLimit() {
-    if(!leftLimitUp.get()) {
-      leftMotor.set(leftDirection * ARM_LIFT_CONSTANTS.SPEED);
-    }
-    else{
-      leftMotor.set(0);
-    }
-
-    if(!rightLimitUp.get()){
-      rightMotor.set(rightDirection * ARM_LIFT_CONSTANTS.SPEED);
-    }
-    else{
-      rightMotor.set(0);
-    }
   }
 
   public void downLimit() {
@@ -99,19 +78,13 @@ public class ArmLift extends SubsystemBase {
       rightMotor.set(0);
   }
 
-  public boolean getUpperLimits(){
-    return(leftLimitUp.get() && rightLimitUp.get());
-  }
-
   public boolean getLowerLimits(){
     return(leftLimitDown.get() && rightLimitDown.get());
   }
   
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Left Limit UP", leftLimitUp.get());
     SmartDashboard.putBoolean("Left Limit DOWN", leftLimitDown.get());
-    SmartDashboard.putBoolean("Right Limit UP", rightLimitUp.get());
     SmartDashboard.putBoolean("Right Limit DOWN", rightLimitDown.get());
   }
 }

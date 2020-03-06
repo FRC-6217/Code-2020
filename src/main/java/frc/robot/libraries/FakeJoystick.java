@@ -28,6 +28,11 @@ public class FakeJoystick extends Joystick{
     }
 
     @Override
+    public boolean getRawButton(int button) {
+        return false;
+    }
+
+    @Override
     public double getRawAxis(int axis) {
         return this.axis[axis];
     }
@@ -45,19 +50,19 @@ public class FakeJoystick extends Joystick{
     }
 
     public void setThrottle(double t){
-        axis[3] = t; 
+        axis[3] = 1-t; 
     }
 
     public void setBackwards(double percent){
         setX(0);
-        setY(1);
+        setY(-1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }
     
     public void setForwards(double percent){
         setX(0);
-        setY(-1);
+        setY(1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }

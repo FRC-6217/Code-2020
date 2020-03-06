@@ -15,10 +15,10 @@ public class Wait extends CommandBase {
   /**
    * Creates a new Wait.
    */
-  private int sec;
+  private double sec;
   private Timer t;
   
-  public Wait(int sec) {
+  public Wait(double sec) {
     t = new Timer();
     this.sec = sec;
     // Use addRequirements() here to declare subsystem dependencies.

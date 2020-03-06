@@ -14,118 +14,118 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.ALIGN_COMMAND_CONSTANTS;
 import frc.robot.libraries.Angle;
-import frc.robot.libraries.Distance;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.libraries.DistanceX;
+import frc.robot.libraries.DistanceY;
 import frc.robot.subsystems.LimeLight;
 
 public class Align extends CommandBase {
 
-  private final DriveTrain driveTrain;
-  private LimeLight light;
+  private final DriveTrain train;
   private Joystick joy;
-  private double y;
-  private double x;
-  private double z;
+  private LimeLight lime;
   private Angle angle;
-  private Distance distance;
+  private DistanceY distanceY;
+  private DistanceX distanceX;
+  private double setZ;
+  private double setY;
+  private double setX;
 
-  private boolean angleUse;
-  private boolean distanceUse;
+  private boolean angleUse = true;
+  private boolean distanceYUse = true;
+  private boolean distanceXUse = true;
+
+  private double x;
+  private double y;
+  private double z;
+
+
 
   private PIDController pidZ;
   private double errorZ;
   private double outputZ;
+  private boolean outRangeZ;
 
   private double kPZ = ALIGN_COMMAND_CONSTANTS.kPZ;
   private double kIZ = ALIGN_COMMAND_CONSTANTS.kIZ;
   private double kDZ = ALIGN_COMMAND_CONSTANTS.kDZ;
+  private double kMinZ = ALIGN_COMMAND_CONSTANTS.kMinZ;
+  private double kMaxZ = ALIGN_COMMAND_CONSTANTS.kMaxZ;
 
   private PIDController pidY;
   private double errorY;
   private double outputY;
+  private boolean outRangeY;
 
   private double kPY = ALIGN_COMMAND_CONSTANTS.kPY;
   private double kIY = ALIGN_COMMAND_CONSTANTS.kIY;
   private double kDY = ALIGN_COMMAND_CONSTANTS.kDY;
+  private double kMinY = ALIGN_COMMAND_CONSTANTS.kMinY;
+  private double kMaxY = ALIGN_COMMAND_CONSTANTS.kMaxY;
 
-  private boolean atSetZ;
-  private boolean atSetY;
+  private PIDController pidX;
+  private double errorX;
+  private double outputX;
+  private boolean outRangeX;
+
+  private double kPX = ALIGN_COMMAND_CONSTANTS.kPX;
+  private double kIX = ALIGN_COMMAND_CONSTANTS.kIX;
+  private double kDX = ALIGN_COMMAND_CONSTANTS.kDX;
+  private double kMinX = ALIGN_COMMAND_CONSTANTS.kMinX;
+  private double kMaxX = ALIGN_COMMAND_CONSTANTS.kMaxX;
   
-  public Align(DriveTrain train, Joystick joy, Angle angle, Distance distance) {
+  public Align(DriveTrain train, Joystick joy, LimeLight lime, Angle angle, double setZ, DistanceY distanceY, double setY, DistanceX distanceX, double setX) {
     addRequirements(train);
+    addRequirements(lime);
 
-    driveTrain = train;
+    this.train = train;
     this.joy = joy;
+    this.lime = lime;
     this.angle = angle;
-    this.distance = distance;
+    this.distanceY = distanceY;
+    this.distanceX = distanceX;
+    this.setZ = setZ;
+    this.setY = setY;
+    this.setX = setX;
 
-    angleUse = true;
-    distanceUse = true;
+    // lime.visionOn();
+
+    if(angle == null){
+      angleUse = false;
+    }
+    if(distanceY == null){
+      distanceYUse = false;
+    }
+    if(distanceX == null){
+      distanceXUse = false;
+    }
 
     pidZ = new PIDController(kPZ, kIZ, kDZ);
     pidY = new PIDController(kPY, kIY, kDY);
-
-    pidZ.setTolerance(0.1, 0.1);
-    pidY.setTolerance(0.1, 0.1);
+    pidY = new PIDController(kPY, kIY, kDY);
     
-  }
-
-  public Align(DriveTrain train, Joystick joy, Angle angle) {
-    addRequirements(train);
-
-    driveTrain = train;
-    this.joy = joy;
-    this.angle = angle;
-
-    angleUse = true;
-    distanceUse = false;
-
-    pidZ = new PIDController(kPZ, kIZ, kDZ);
-    pidZ.setTolerance(10, 10);
-  }
-
-  public Align(DriveTrain train, LimeLight light, Joystick joy, Distance distance) {
-    addRequirements(train);
-
-    this.light = light;
-    light.limeRequired();
-
-    driveTrain = train;
-    this.joy = joy;
-    this.distance = distance;
-
-    angleUse = false;
-    distanceUse = true;
-
-    atSetY = false;
-    pidY = new PIDController(kPY, kIY, kDY);
-    pidY.setTolerance(50, 1000);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("KpAlignZ", 0.1);
-    SmartDashboard.putNumber("KiAlignZ", 0);
-	  SmartDashboard.putNumber("KdAlignZ", 0);
-	
-	  SmartDashboard.putNumber("KpAlignY", 0.1);
-    SmartDashboard.putNumber("KiAlignY", 0);
-    SmartDashboard.putNumber("KdAlignY", 0);
+    SmartDashboard.putNumber("KpAlignZ", kPZ);
+    SmartDashboard.putNumber("KiAlignZ", kIZ);
+    SmartDashboard.putNumber("KdAlignZ", kDZ);
+    SmartDashboard.putNumber("KminAlignZ", kMinZ);
+    SmartDashboard.putNumber("KmaxAlignZ", kMaxZ);
   
-
-    atSetZ = false;
+    SmartDashboard.putNumber("KpAlignY", kPY);
+    SmartDashboard.putNumber("KiAlignY", kIY);
+    SmartDashboard.putNumber("KdAlignY", kDY);
+    SmartDashboard.putNumber("KminAlignY", kMinY);
+    SmartDashboard.putNumber("KmaxAlignY", kMaxY);
     
-    double localAngle = angle.getAngle();
-    
-    errorZ = pidZ.calculate(localAngle, 0);
-    SmartDashboard.putNumber("ErrorZ", errorZ);
-    outputZ = MathUtil.clamp(errorZ, -1, 1);
-
-    if(pidZ.atSetpoint()){
-      atSetZ = true;
-    }
-
+    SmartDashboard.putNumber("KpAlignX", kPX);
+    SmartDashboard.putNumber("KiAlignX", kIX);
+    SmartDashboard.putNumber("KdAlignX", kDX);
+    SmartDashboard.putNumber("KMinAlignX", kMinX);
+    SmartDashboard.putNumber("KMaxAlignX", kMaxX);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -133,92 +133,80 @@ public class Align extends CommandBase {
   public void execute() {
     //Dead zone
     x = (Math.abs(joy.getRawAxis(0)) > .2) ? joy.getRawAxis(0) : 0.0;
-    y = (Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0;
-    z = (Math.abs(joy.getRawAxis(2)) > .2) ? joy.getRawAxis(2) : 0.0;
+    y = -((Math.abs(joy.getRawAxis(1)) > .2) ? joy.getRawAxis(1) : 0.0);
+    z = -((Math.abs(joy.getRawAxis(2)) > .2) ? joy.getRawAxis(2) : 0.0);
 
-    if(angleUse && !distanceUse){
+    if(angleUse){
       updatePIDZ();
-  
+
       double localAngle = angle.getAngle();
       if((localAngle != (Double.POSITIVE_INFINITY))){
-        if (pidZ.atSetpoint()) {
-          localAngle = 0;
-        }      
-
-        errorZ = pidZ.calculate(localAngle, 0);
+        outRangeZ = false;
+        errorZ = pidZ.calculate(localAngle, setZ);
         SmartDashboard.putNumber("ErrorZ", errorZ);
         outputZ = MathUtil.clamp(errorZ, -1, 1);
-
-        driveTrain.Drive(x, -y, outputZ, 0.5);
-        //TODO set max speed constant
       }
       else{
-        driveTrain.Drive(x, -y, z, 0.5);
+        outRangeZ = true;
+        outputZ = 0;
       }
     }
-  
-    if(!angleUse && distanceUse){
+    else{
+      outputZ = 0;
+    }
+
+    if(distanceYUse){
       updatePIDY();
 
-      double localDistance = distance.getDistance();
-      if((localDistance != (Double.POSITIVE_INFINITY))){
-        SmartDashboard.putBoolean("At Set", pidY.atSetpoint());
-        SmartDashboard.putNumber("Velocity", pidY.getVelocityError());
-        SmartDashboard.putNumber("Position", pidY.getPositionError());
-        
-        if (atSetY) {
-          localDistance = 7;
-        }      
-
-        errorY = pidY.calculate(localDistance, 7);
+      double localDistanceY = distanceY.getDistance();
+      if((localDistanceY != (Double.POSITIVE_INFINITY))){
+        outRangeY = false;
+        errorY = pidY.calculate(localDistanceY, setY);
         SmartDashboard.putNumber("ErrorY", errorY);
         outputY = MathUtil.clamp(errorY, -1, 1);
-
-        atSetY = false;
-        if(pidY.atSetpoint()){
-          atSetY = true;
-        }
-
-        driveTrain.Drive(x, -outputY, -z, 0.1);
-        //TODO set max speed constant
       }
       else{
-        driveTrain.Drive(x, -y, -z, 0.5);
+        outRangeY = true;
+        outputY = 0;
       }
     }
+    else{
+      outputY = 0;
+    }
 
-    if(angleUse && distanceUse){
-      updatePIDZ();
-      updatePIDY();
+    if(distanceXUse){
+      updatePIDX();
 
-      double localAngle = angle.getAngle();
-      double localDistance = distance.getDistance();
-      if((localAngle != (Double.POSITIVE_INFINITY)) && (localDistance != (Double.POSITIVE_INFINITY))){
-        if (pidZ.atSetpoint()) {
-          localAngle = 0;
-        }
-        if (pidY.atSetpoint()) {
-          localDistance = 0;
-        }      
-
-        errorZ = pidZ.calculate(localAngle, 0);
-        SmartDashboard.putNumber("ErrorZ", errorZ);
-        outputZ = MathUtil.clamp(errorZ, -1, 1);
-
-        errorY = pidY.calculate(localDistance, 10);
-        SmartDashboard.putNumber("ErrorY", errorY);
-        outputY = MathUtil.clamp(errorY, -1, 1);
-
-        driveTrain.Drive(-x, outputY, outputZ, 0.5);
-        //TODO set max speed constant
+      double localDistanceX = distanceX.getDistance();
+      if((localDistanceX != (Double.POSITIVE_INFINITY))){
+        outRangeX = false;
+        errorX = pidX.calculate(localDistanceX, setX);
+        SmartDashboard.putNumber("ErrorX", errorX);
+        outputX = MathUtil.clamp(errorX, -1, 1);
       }
       else{
-        driveTrain.Drive(-y, x, z, 0.5);
+        outRangeX = true;
+        outputX = 0;
       }
-
+    }
+    else{
+      outputX = 0;
     }
 
-  }
+    System.out.println("outZ: " + outputZ);
+
+      double zSend = (outputZ * (1 - ALIGN_COMMAND_CONSTANTS.Z_HUMAN_IMPORTANCE)) + (z * ALIGN_COMMAND_CONSTANTS.Z_HUMAN_IMPORTANCE); 
+      // zSend = MathUtil.clamp(zSend, -kMaxZ, kMaxZ);
+      System.out.println("zSend: " + zSend);
+
+      double ySend = (outputY * (1 - ALIGN_COMMAND_CONSTANTS.Y_HUMAN_IMPORTANCE)) + (y * ALIGN_COMMAND_CONSTANTS.Y_HUMAN_IMPORTANCE); 
+      // ySend = MathUtil.clamp(ySend, -kMaxY, kMaxY);
+
+      double xSend = (outputX * (1 - ALIGN_COMMAND_CONSTANTS.X_HUMAN_IMPORTANCE)) + (x * ALIGN_COMMAND_CONSTANTS.X_HUMAN_IMPORTANCE); 
+      // xSend = MathUtil.clamp(xSend, -kMaxX, kMaxX);
+
+      train.drive(xSend, ySend, zSend, 1); 
+    }
 
   public void updatePIDZ(){
     boolean isUpdated = false;
@@ -235,8 +223,17 @@ public class Align extends CommandBase {
       kDZ = SmartDashboard.getNumber("KdAlignZ", 0);
       isUpdated = true;  
     }
+    if(SmartDashboard.getNumber("KMinAlignZ", 0) != kMinZ){
+      kMinZ = SmartDashboard.getNumber("KMinAlignZ", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KMaxAlignZ", 0) != kMaxZ){
+      kMaxZ = SmartDashboard.getNumber("KMaxAlignZ", 0);
+      isUpdated = true;  
+    }
 
     if(isUpdated){
+      System.out.println("Updating");
       pidZ.setP(kPZ);
       pidZ.setI(kIZ);
       pidZ.setD(kDZ);
@@ -245,7 +242,7 @@ public class Align extends CommandBase {
 
   public void updatePIDY(){
     boolean isUpdated = false;
-    
+  
     if(SmartDashboard.getNumber("KpAlignY", 0) != kPY){
       kPY = SmartDashboard.getNumber("KpAlignY", 0);
       isUpdated = true;  
@@ -258,6 +255,14 @@ public class Align extends CommandBase {
       kDY = SmartDashboard.getNumber("KdAlignY", 0);
       isUpdated = true;  
     }
+    if(SmartDashboard.getNumber("KMinAlignY", 0) != kMinY){
+      kMinY = SmartDashboard.getNumber("KMinAlignY", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KMaxAlignY", 0) != kMaxY){
+      kMaxY = SmartDashboard.getNumber("KMaxAlignY", 0);
+      isUpdated = true;  
+    }
 
     if(isUpdated){
       pidY.setP(kPY);
@@ -266,28 +271,69 @@ public class Align extends CommandBase {
     }
   }
 
+  public void updatePIDX(){
+    boolean isUpdated = false;
+  
+    if(SmartDashboard.getNumber("KpAlignX", 0) != kPX){
+      kPX = SmartDashboard.getNumber("KpAlignX", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KiAlignX", 0) != kIX){
+      kIX = SmartDashboard.getNumber("KiAlignX", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KdAlignX", 0) != kDX){
+      kDX = SmartDashboard.getNumber("KdAlignX", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KMinAlignX", 0) != kMinX){
+      kMinX = SmartDashboard.getNumber("KMinAlignX", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("KMaxAlignX", 0) != kMaxX){
+      kMaxX = SmartDashboard.getNumber("KMaxAlignX", 0);
+      isUpdated = true;  
+    }
+
+    if(isUpdated){
+      pidX.setP(kPX);
+      pidX.setI(kIX);
+      pidX.setD(kDX);
+    }
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.Drive(0, 0, 0, 0);
-    // light.limeNotRequired();
+    train.drive(0, 0, 0, 0);
+    // lime.visionOff();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(angleUse && distanceUse){
-      return (pidZ.atSetpoint() && pidY.atSetpoint());
+    boolean zDone = true;
+    boolean yDone = true;
+    boolean xDone = true;
+
+    if(angleUse){
+      if((train.getGreatestVel() != 0) && (outputZ != 0) && (!outRangeZ)){
+        zDone = false;
+        System.out.println("Done" + zDone);
+      }
     }
-    else if(angleUse && !distanceUse){
-      return (pidZ.atSetpoint());
+    if(distanceYUse){
+      if((train.getGreatestVel() != 0) && (outputY != 0) && (!outRangeY)){
+        yDone = false;
+      }
     }
-    else if(!angleUse && distanceUse){
-      return (pidY.atSetpoint());
+    if(distanceXUse){
+      if(!(train.getGreatestVel() == 0) && (outputY != 0) && (!outRangeX)){
+        zDone = false;
+      }
     }
-    else{
-      return true;
-    }
+
+    return(zDone && yDone && xDone);
   }
 
   public String toString(){
