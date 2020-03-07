@@ -51,6 +51,7 @@ public class Align extends CommandBase {
   private double kDZ = ALIGN_COMMAND_CONSTANTS.kDZ;
   private double kMinZ = ALIGN_COMMAND_CONSTANTS.kMinZ;
   private double kMaxZ = ALIGN_COMMAND_CONSTANTS.kMaxZ;
+  private double HumanZ = ALIGN_COMMAND_CONSTANTS.Z_HUMAN_IMPORTANCE;
 
   private PIDController pidY;
   private double errorY;
@@ -62,6 +63,7 @@ public class Align extends CommandBase {
   private double kDY = ALIGN_COMMAND_CONSTANTS.kDY;
   private double kMinY = ALIGN_COMMAND_CONSTANTS.kMinY;
   private double kMaxY = ALIGN_COMMAND_CONSTANTS.kMaxY;
+  private double HumanY = ALIGN_COMMAND_CONSTANTS.Y_HUMAN_IMPORTANCE;
 
   private PIDController pidX;
   private double errorX;
@@ -73,6 +75,7 @@ public class Align extends CommandBase {
   private double kDX = ALIGN_COMMAND_CONSTANTS.kDX;
   private double kMinX = ALIGN_COMMAND_CONSTANTS.kMinX;
   private double kMaxX = ALIGN_COMMAND_CONSTANTS.kMaxX;
+  private double HumanX = ALIGN_COMMAND_CONSTANTS.X_HUMAN_IMPORTANCE;
   
   public Align(DriveTrain train, Joystick joy, LimeLight lime, Angle angle, double setZ, DistanceY distanceY, double setY, DistanceX distanceX, double setX) {
     addRequirements(train);
@@ -112,20 +115,23 @@ public class Align extends CommandBase {
     SmartDashboard.putNumber("KpAlignZ", kPZ);
     SmartDashboard.putNumber("KiAlignZ", kIZ);
     SmartDashboard.putNumber("KdAlignZ", kDZ);
-    SmartDashboard.putNumber("KminAlignZ", kMinZ);
-    SmartDashboard.putNumber("KmaxAlignZ", kMaxZ);
+    SmartDashboard.putNumber("KMinAlignZ", kMinZ);
+    SmartDashboard.putNumber("KMaxAlignZ", kMaxZ);
+    SmartDashboard.putNumber("HumanZ", HumanZ);
   
     SmartDashboard.putNumber("KpAlignY", kPY);
     SmartDashboard.putNumber("KiAlignY", kIY);
     SmartDashboard.putNumber("KdAlignY", kDY);
-    SmartDashboard.putNumber("KminAlignY", kMinY);
-    SmartDashboard.putNumber("KmaxAlignY", kMaxY);
+    SmartDashboard.putNumber("KMinAlignY", kMinY);
+    SmartDashboard.putNumber("KMaxAlignY", kMaxY);
+    SmartDashboard.putNumber("HumanY", HumanY);
     
     SmartDashboard.putNumber("KpAlignX", kPX);
     SmartDashboard.putNumber("KiAlignX", kIX);
     SmartDashboard.putNumber("KdAlignX", kDX);
     SmartDashboard.putNumber("KMinAlignX", kMinX);
     SmartDashboard.putNumber("KMaxAlignX", kMaxX);
+    SmartDashboard.putNumber("HumanX", HumanX);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -193,19 +199,11 @@ public class Align extends CommandBase {
       outputX = 0;
     }
 
-    System.out.println("outZ: " + outputZ);
-
-      double zSend = (outputZ * (1 - ALIGN_COMMAND_CONSTANTS.Z_HUMAN_IMPORTANCE)) + (z * ALIGN_COMMAND_CONSTANTS.Z_HUMAN_IMPORTANCE); 
-      // zSend = MathUtil.clamp(zSend, -kMaxZ, kMaxZ);
-      System.out.println("zSend: " + zSend);
-
+      double zSend = (outputZ * (1 - HumanZ)) + (z * HumanZ); 
       double ySend = (outputY * (1 - ALIGN_COMMAND_CONSTANTS.Y_HUMAN_IMPORTANCE)) + (y * ALIGN_COMMAND_CONSTANTS.Y_HUMAN_IMPORTANCE); 
-      // ySend = MathUtil.clamp(ySend, -kMaxY, kMaxY);
-
       double xSend = (outputX * (1 - ALIGN_COMMAND_CONSTANTS.X_HUMAN_IMPORTANCE)) + (x * ALIGN_COMMAND_CONSTANTS.X_HUMAN_IMPORTANCE); 
-      // xSend = MathUtil.clamp(xSend, -kMaxX, kMaxX);
 
-      train.drive(xSend, ySend, zSend, 1); 
+      train.drive(xSend * kMaxX, ySend * kMaxY, zSend * kMaxZ, 1); 
     }
 
   public void updatePIDZ(){
@@ -231,9 +229,12 @@ public class Align extends CommandBase {
       kMaxZ = SmartDashboard.getNumber("KMaxAlignZ", 0);
       isUpdated = true;  
     }
+    if(SmartDashboard.getNumber("HumanZ", 0) != HumanZ){
+      HumanZ = SmartDashboard.getNumber("HumanZ", 0);
+      isUpdated = true;  
+    }
 
     if(isUpdated){
-      System.out.println("Updating");
       pidZ.setP(kPZ);
       pidZ.setI(kIZ);
       pidZ.setD(kDZ);
@@ -261,6 +262,10 @@ public class Align extends CommandBase {
     }
     if(SmartDashboard.getNumber("KMaxAlignY", 0) != kMaxY){
       kMaxY = SmartDashboard.getNumber("KMaxAlignY", 0);
+      isUpdated = true;  
+    }
+    if(SmartDashboard.getNumber("HumanY", 0) != HumanY){
+      HumanY = SmartDashboard.getNumber("HumanY", 0);
       isUpdated = true;  
     }
 
@@ -294,6 +299,10 @@ public class Align extends CommandBase {
       kMaxX = SmartDashboard.getNumber("KMaxAlignX", 0);
       isUpdated = true;  
     }
+    if(SmartDashboard.getNumber("HumanX", 0) != HumanX){
+      HumanX = SmartDashboard.getNumber("HumanX", 0);
+      isUpdated = true;  
+    }
 
     if(isUpdated){
       pidX.setP(kPX);
@@ -319,7 +328,6 @@ public class Align extends CommandBase {
     if(angleUse){
       if((train.getGreatestVel() != 0) && (outputZ != 0) && (!outRangeZ)){
         zDone = false;
-        System.out.println("Done" + zDone);
       }
     }
     if(distanceYUse){

@@ -30,19 +30,13 @@ public class NotShooterIntakeCommand extends CommandBase {
   @Override
   public void execute() {
     switch (state) {
-      case FORWARDS:
+      case SUCK:
         notIntake.suck();;
         break;
-      case REVERSE:
+      case SPIT:
         notIntake.spit();
         break;
-      case OFF:
-        notIntake.off();
-        break;
-      case UP:
-        notIntake.off();
-        break;
-      case DOWN:
+      default:
         notIntake.off();
         break;
     }

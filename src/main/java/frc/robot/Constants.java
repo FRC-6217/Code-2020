@@ -85,19 +85,19 @@ public final class Constants {
         public static final double kPZ = 0.1;
         public static final double kIZ = 0;
         public static final double kDZ = 0;
-        public static final double kMinZ = 0.05;
+        public static final double kMinZ = 0.01;
         public static final double kMaxZ = 0.5;
 
-        public static final double kPY = 0.1;
+        public static final double kPY = 0.05;
         public static final double kIY = 0;
         public static final double kDY = 0;
-        public static final double kMinY = 0.05;
-        public static final double kMaxY = 0.5;
+        public static final double kMinY = 0.001;
+        public static final double kMaxY = 0.1;
 
         public static final double kPX = 0.1;
         public static final double kIX = 0;
         public static final double kDX = 0;
-        public static final double kMinX = 0.05;
+        public static final double kMinX = 0.01;
         public static final double kMaxX = 0.5;
 
         public static final double Z_HUMAN_IMPORTANCE = 0.4;
@@ -145,9 +145,16 @@ public final class Constants {
         DOWN,
         FORWARDS,
         REVERSE,
+        SUCK,
+        SPIT,
         ON,
         OFF
       };
+    public static enum COLOR_STATE {
+        TELEOP,
+        SPIN,
+        COLOR
+    };
 }
 
 

@@ -99,7 +99,6 @@ public class BallShooter extends SubsystemBase {
     topMotor.set(topDirection * BALL_SHOOTER_CONSTANTS.SPEED);
     bottomMotor.set(bottomDirection * BALL_SHOOTER_CONSTANTS.SPEED);
     state = STATE.ON;
-    SmartDashboard.putBoolean("BALL SHOOTER", true);
   }
 
   //Activate Shooter with PID
@@ -108,7 +107,6 @@ public class BallShooter extends SubsystemBase {
     topPID.setReference(topDirection * topRPM, ControlType.kVelocity);
     bottomPID.setReference(bottomDirection * bottomRPM, ControlType.kVelocity);
     state = STATE.ON;
-    SmartDashboard.putBoolean("BALL SHOOTER", true);
   }
 
   //Deactivate Shooter
@@ -116,7 +114,6 @@ public class BallShooter extends SubsystemBase {
     topMotor.set(0);
     bottomMotor.set(0);
     state = STATE.OFF;
-    SmartDashboard.putBoolean("BALL SHOOTER", false);
   }
 
   public void enableTuning(){
@@ -128,8 +125,8 @@ public class BallShooter extends SubsystemBase {
     SmartDashboard.putNumber("MaxInShooter", kMaxOutput);
     SmartDashboard.putNumber("MinInShooter", kMinOutput);
 
-    SmartDashboard.putNumber("Top Shoot Set", 3500);
-    SmartDashboard.putNumber("Bottom Shoot Set", 3500);
+    SmartDashboard.putNumber("Top Shoot Set", 3200);
+    SmartDashboard.putNumber("Bottom Shoot Set", 3200);
   }
 
   public void updatePID(){
@@ -187,6 +184,13 @@ public class BallShooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if((topEncoder.getVelocity() >= (topSet - 500)) && (bottomEncoder.getVelocity() >= (bottomSet - 500))){
+      SmartDashboard.putBoolean("BALL SHOOTER", true);
+    }
+    else{
+      SmartDashboard.putBoolean("BALL SHOOTER", false);
+    }
+
     SmartDashboard.putNumber("Current Top", topMotor.getOutputCurrent());
     SmartDashboard.putNumber("Current Bottom", bottomMotor.getOutputCurrent());
     //Print Current Velocity of Both Motors

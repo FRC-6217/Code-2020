@@ -78,6 +78,8 @@ public class JoyDriveCommand extends CommandBase {
     y = (Math.abs(y) > .2 ? y : 0.0);
     z = (Math.abs(z) > .2 ? z : 0.0);
 
+    z *= 0.7;
+
     // x1 = driveTrain.TransformX(x, y, isReversed);
     // y1 = driveTrain.TransformY(x, y, isReversed);
 

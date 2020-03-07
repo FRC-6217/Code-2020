@@ -12,16 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Wait extends CommandBase {
-  /**
-   * Creates a new Wait.
-   */
   private double sec;
   private Timer t;
   
   public Wait(double sec) {
     t = new Timer();
     this.sec = sec;
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.

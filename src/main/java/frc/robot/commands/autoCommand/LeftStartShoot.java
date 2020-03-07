@@ -9,11 +9,13 @@ package frc.robot.commands.autoCommand;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.STATE;
+import frc.robot.commands.ArmLiftCommand;
 import frc.robot.commands.BallShooterCommand;
 import frc.robot.commands.JoyDriveCommand;
 import frc.robot.commands.ShooterIntakeCommand;
 import frc.robot.commands.Wait;
 import frc.robot.libraries.FakeJoystick;
+import frc.robot.subsystems.ArmLift;
 import frc.robot.subsystems.BallShooter;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ShooterIntake;
@@ -25,9 +27,9 @@ public class LeftStartShoot extends SequentialCommandGroup {
   /**
    * Creates a new LeftStartShoot.
    */
-  public LeftStartShoot(BallShooter bs, ShooterIntake si, DriveTrain dt, FakeJoystick joy) {
+  public LeftStartShoot(BallShooter bs, ArmLift al, ShooterIntake si, DriveTrain dt, FakeJoystick joy) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new BallShooterCommand(bs), new Wait(2), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 1), new BallShooterCommand(bs), new JoyDriveCommand(dt, joy, 20));
+    super(new BallShooterCommand(bs), new ArmLiftCommand(al, STATE.DOWN, 1.5), new Wait(0.5), new ShooterIntakeCommand(si, STATE.FORWARDS, 0.25), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 0.5), new ShooterIntakeCommand(si, STATE.OFF, 1), new ShooterIntakeCommand(si, STATE.FORWARDS, 1), new ShooterIntakeCommand(si, STATE.OFF, 0), new BallShooterCommand(bs), new JoyDriveCommand(dt, joy, 50));
   }
 }

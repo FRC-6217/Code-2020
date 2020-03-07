@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants.COLOR_STATE;
 import frc.robot.Constants.STATE;
 import frc.robot.commands.Align;
 import frc.robot.commands.ArmLiftCommand;
@@ -56,7 +57,8 @@ public class RobotContainer {
 
   //Helper classes
   private final Angle gyroAngle = new Angle();
-  private final Angle limeAngle = new Angle();
+  private final Angle limeAngleZ = new Angle();
+  private final Angle limeAngleY = new Angle();
   private final DistanceY limeDistanceY = new DistanceY();
   private final DistanceX limeDistanceX = new DistanceX();
 
@@ -69,7 +71,7 @@ public class RobotContainer {
   private final Winch winch = new Winch();
   private final ColorWheel colorWheel = new ColorWheel();
   private final GyroSub gyroSub = new GyroSub(gyroAngle);
-  private final LimeLight limeLight = new LimeLight(limeAngle, limeDistanceY, limeDistanceX, gyroAngle);
+  private final LimeLight limeLight = new LimeLight(limeAngleZ, limeAngleY, limeDistanceY, limeDistanceX, gyroAngle);
 
 
   public RobotContainer() {
@@ -86,7 +88,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Drive Stick
-    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, limeLight, limeAngle, 0, null, 0, null, 0));
+    new JoystickButton(driveStick, 1).whileHeld(new Align(driveTrain, driveStick, limeLight, limeAngleZ, 0, null, 0, null, 0));
  
     //Xbox Joystick
   
@@ -96,9 +98,9 @@ public class RobotContainer {
     new JoystickButton(xbox, Button.kBumperRight.value).whenPressed(new BallShooterCommand(ballShooter));
     new JoystickButton(xbox, Button.kY.value).whileHeld(new WinchCommand(winch, STATE.UP));
     new JoystickButton(xbox, Button.kX.value).whileHeld(new WinchCommand(winch, STATE.DOWN));
-    new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.FORWARDS));
-    new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.REVERSE));
-    new JoystickButton(xbox, Button.kStickRight.value).whileHeld(new ColorWheelCommand(colorWheel));
+    new JoystickButton(xbox, Button.kA.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.SUCK));
+    new JoystickButton(xbox, Button.kB.value).whileHeld(new NotShooterIntakeCommand(notShooterIntake, STATE.SPIT));
+    new JoystickButton(xbox, Button.kStickRight.value).whileHeld(new ColorWheelCommand(colorWheel, COLOR_STATE.TELEOP));
   
 
     // arm hn
@@ -123,10 +125,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     FakeJoystick fake = new FakeJoystick();
-    fake.setBackwards(.1);
+    fake.setForwards(.1);
 
-    return new Test(driveTrain, fake);
-    // return new LeftStartShoot(ballShooter, shooterIntake, driveTrain, fake);
+    // return new Test(driveTrain, fake);
+    return new LeftStartShoot(ballShooter, armLift, shooterIntake, driveTrain, fake);
     // FakeJoystick fakeFoward = new FakeJoystick();
     // fakeFoward.setForwards(.2);
     // FakeJoystick fakeBackwards = new FakeJoystick();

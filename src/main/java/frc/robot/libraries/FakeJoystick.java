@@ -55,14 +55,14 @@ public class FakeJoystick extends Joystick{
 
     public void setBackwards(double percent){
         setX(0);
-        setY(-1);
+        setY(1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }
     
     public void setForwards(double percent){
         setX(0);
-        setY(1);
+        setY(-1);
         setZ(0);
         setThrottle(Math.abs(percent));
     }

@@ -13,10 +13,10 @@ import frc.robot.Constants.STATE;
 import frc.robot.subsystems.ShooterIntake;
 
 public class ShooterIntakeCommand extends CommandBase {
-  ShooterIntake intake;
-  STATE state;
-  Timer timer; 
-  double timeOut;
+  private ShooterIntake intake;
+  private STATE state;
+  private Timer timer; 
+  private double timeOut;
   
   public ShooterIntakeCommand(ShooterIntake intake, STATE state) {
     addRequirements(intake);
@@ -28,10 +28,8 @@ public class ShooterIntakeCommand extends CommandBase {
     addRequirements(intake);
     this.intake = intake;
     this.state = state;
-
     this.timer = new Timer();
     this.timeOut = timeOut;
-    
   }
 
   // Called when the command is initially scheduled.
@@ -52,13 +50,7 @@ public class ShooterIntakeCommand extends CommandBase {
       case REVERSE:
         intake.reverse();
         break;
-      case OFF:
-        intake.off();
-        break;
-      case UP:
-        intake.off();
-        break;
-      case DOWN:
+      default:
         intake.off();
         break;
     }
