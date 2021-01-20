@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.libraries.WheelDrive;
 import frc.robot.Constants.DRIVE_TRAIN_CONSTANTS;
 
-public class DriveTrain extends SubsystemBase {
+public class driveTrain extends SubsystemBase {
   	
 	//constants for the width and length;
 	private final double L = DRIVE_TRAIN_CONSTANTS.LENGTH; //front to back in.
@@ -34,7 +34,7 @@ public class DriveTrain extends SubsystemBase {
 	private double x1;
 	private double y1;
 
-  	public DriveTrain() {
+  	public driveTrain() {
 
 		//Wheel Drive Modules
 		backRight = new WheelDrive(DRIVE_TRAIN_CONSTANTS.BR_SPEED_MOTOR, DRIVE_TRAIN_CONSTANTS.BR_ANGLE_MOTOR);

@@ -9,10 +9,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.driveTrain;
 
 public class JoyDriveCommand extends CommandBase {
-  private final DriveTrain driveTrain;
+  private final driveTrain driveTrain;
 
   private Joystick joy;
   private double x;
@@ -30,7 +30,7 @@ public class JoyDriveCommand extends CommandBase {
   /**
    * Creates a new JoyDrive.
    */
-  public JoyDriveCommand(DriveTrain train, Joystick joy) {
+  public JoyDriveCommand(driveTrain train, Joystick joy) {
     addRequirements(train);
 
     driveTrain = train;

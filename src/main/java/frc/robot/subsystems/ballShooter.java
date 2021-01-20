@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.BALL_SHOOTER_CONSTANTS;
 
-public class BallShooter extends SubsystemBase {
+public class ballShooter extends SubsystemBase {
 
   private CANSparkMax topMotor;
   private CANSparkMax bottomMotor;
@@ -38,7 +38,7 @@ public class BallShooter extends SubsystemBase {
   private double kMinOutput;
   private double kMaxOutput;
 
-  public BallShooter() {
+  public ballShooter() {
     topMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_TOP, MotorType.kBrushless);
     bottomMotor = new CANSparkMax(BALL_SHOOTER_CONSTANTS.MOTOR_CONTROLLER_ID_BOTTOM, MotorType.kBrushless);
 

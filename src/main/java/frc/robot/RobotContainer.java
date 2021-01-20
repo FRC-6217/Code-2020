@@ -27,9 +27,9 @@ import frc.robot.libraries.FakeJoystick;
 import frc.robot.libraries.JoystickTrigger;
 import frc.robot.subsystems.ArmLift;
 import frc.robot.subsystems.ArmLiftSeperate;
-import frc.robot.subsystems.BallShooter;
+import frc.robot.subsystems.ballShooter;
 import frc.robot.subsystems.ColorWheel;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.NotShooterIntake;
 import frc.robot.subsystems.ShooterIntake;
@@ -56,11 +56,11 @@ public class RobotContainer {
   private final Distance distance = new Distance();
 
   // Subsystems
-  private final DriveTrain driveTrain = new DriveTrain();
+  private final driveTrain driveTrain = new driveTrain();
   private final ArmLift armLift = new ArmLift();
   private final ShooterIntake shooterIntake = new ShooterIntake();
   private final NotShooterIntake notShooterIntake = new NotShooterIntake();
-  private final BallShooter ballShooter = new BallShooter();
+  private final ballShooter ballShooter = new ballShooter();
   private final Winch winch = new Winch();
   private final ColorWheel colorWheel = new ColorWheel();
   private final LimeLight limeLight = new LimeLight(angle, distance);

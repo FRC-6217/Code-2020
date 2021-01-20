@@ -15,12 +15,12 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.ALIGN_COMMAND_CONSTANTS;
 import frc.robot.libraries.Angle;
 import frc.robot.libraries.Distance;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.LimeLight;
 
 public class Align extends CommandBase {
 
-  private final DriveTrain driveTrain;
+  private final driveTrain driveTrain;
   private LimeLight light;
   private Joystick joy;
   private double y;
@@ -51,7 +51,7 @@ public class Align extends CommandBase {
   private boolean atSetZ;
   private boolean atSetY;
   
-  public Align(DriveTrain train, Joystick joy, Angle angle, Distance distance) {
+  public Align(driveTrain train, Joystick joy, Angle angle, Distance distance) {
     addRequirements(train);
 
     driveTrain = train;
@@ -70,7 +70,7 @@ public class Align extends CommandBase {
     
   }
 
-  public Align(DriveTrain train, Joystick joy, Angle angle) {
+  public Align(driveTrain train, Joystick joy, Angle angle) {
     addRequirements(train);
 
     driveTrain = train;
@@ -84,7 +84,7 @@ public class Align extends CommandBase {
     pidZ.setTolerance(10, 10);
   }
 
-  public Align(DriveTrain train, LimeLight light, Joystick joy, Distance distance) {
+  public Align(driveTrain train, LimeLight light, Joystick joy, Distance distance) {
     addRequirements(train);
 
     this.light = light;

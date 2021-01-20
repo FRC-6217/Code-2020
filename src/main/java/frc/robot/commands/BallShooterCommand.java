@@ -9,15 +9,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallShooter;
+import frc.robot.subsystems.ballShooter;
 
 public class BallShooterCommand extends CommandBase {
   boolean ifOn;
-  BallShooter shooter;
+  ballShooter shooter;
   /**
    * Creates a new ShooterCommand.
    */
-  public BallShooterCommand(BallShooter shooter, boolean ifOn) {
+  public BallShooterCommand(ballShooter shooter, boolean ifOn) {
     addRequirements(shooter);
     this.shooter = shooter;
     this.ifOn = ifOn;
